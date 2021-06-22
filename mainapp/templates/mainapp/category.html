@@ -1,7 +1,8 @@
 {% extends 'mainapp/base.html' %}
 
 {% block content %}
-    <hi>{{ Title }}</hi>
+    <hi>{{ title }}</hi>
+    <p>Задачи по выбранной категории {{ category }}</p>
     <ul>
     {% for category in categories %}
         <li>{{ category }}</li>

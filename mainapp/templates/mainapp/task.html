@@ -1,0 +1,12 @@
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+    <hi>{{ title }}</hi>
+    <p>Задача{{ task.title }}</p>
+    <p>Задача{{ task.content }}</p>
+{#    <ul>#}
+{#    {% for comment in task.chat.comments %}#}
+{#        <li>{{ comment }}</li>#}
+{#    {%endfor%}#}
+{#    </ul>#}
+{% endblock content %}
