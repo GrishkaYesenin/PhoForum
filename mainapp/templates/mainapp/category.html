@@ -3,9 +3,16 @@
 {% block content %}
     <hi>{{ title }}</hi>
     <p>Задачи по выбранной категории {{ category }}</p>
+
     <ul>
     {% for task in tasks %}
-        <li>{{ task.content }}</li>
+        <li>
+            <h2>{{ task.get_name }}</h2>
+            <h2><a href={% url 'task' category_slug=task.category.slug task_id=task.id %}>Ботать</a></h2>
+            <p>{{ task.id }}</p>
+            <p>{{ task }}</p>
+            <hr>
+        </li>
     {%endfor%}
     </ul>
 {% endblock content %}

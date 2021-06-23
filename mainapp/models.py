@@ -31,6 +31,16 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('category', kwargs={'task_id': self.id})
 
+    def get_name(self):
+        name = ""
+        if self.resource:
+            name += self.resource + " "
+        if self.grade:
+            name += str(self.grade) + "кл. "
+        if self.year:
+            name += str(self.year) + "г."
+        return name
+
 
 class Category(models.Model):
     slug = models.SlugField(unique=True)
