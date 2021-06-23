@@ -9,12 +9,14 @@ from django.urls import reverse
 
 
 class Task(models.Model):
-    title = models.CharField(max_length=100, verbose_name="Название задачи")
+    title = models.CharField(max_length=100, verbose_name="Название задачи", blank=True, null=True)
     content = models.TextField(max_length=1500, verbose_name="Условие задачи")
     image = models.ImageField(blank=True, null=True)
     resource = models.CharField(max_length=500, blank=True)
+    year = models.PositiveSmallIntegerField(blank=True, null=True)
     grade = models.PositiveSmallIntegerField(verbose_name="Класс", blank=True, null=True)
     difficulty_level = models.PositiveSmallIntegerField(verbose_name="Уровень сложности", blank=True, null=True)
+    answer = models.CharField(max_length=500, blank=True, null=True)
     chat = models.OneToOneField('Chat', on_delete=models.CASCADE, blank=True, null=True)
     category = models.ForeignKey(
         'Category',
@@ -24,7 +26,7 @@ class Task(models.Model):
     )
 
     def __str__(self):
-        return str(self.title)
+        return str(self.content)
 
     def get_absolute_url(self):
         return reverse('category', kwargs={'task_id': self.id})
@@ -39,6 +41,7 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('home', kwargs={'category_slug': self.slug})
+
 
 
 class Comment(models.Model):

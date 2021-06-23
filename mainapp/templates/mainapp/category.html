@@ -4,8 +4,8 @@
     <hi>{{ title }}</hi>
     <p>Задачи по выбранной категории {{ category }}</p>
     <ul>
-    {% for category in categories %}
-        <li>{{ category }}</li>
+    {% for task in tasks %}
+        <li>{{ task.content }}</li>
     {%endfor%}
     </ul>
 {% endblock content %}

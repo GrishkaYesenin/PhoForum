@@ -15,14 +15,20 @@ def index(request):
 
 
 def get_list_of_tasks(request, category_slug):
-    context = {
-        'title': 'PhoForum',
-        'category': category_slug
-    }
-    if category_slug in [elem.slug for elem in Category.objects.all()]:
-        return render(request, 'mainapp/category.html', context=context)
+    cat_by_slug, = Category.objects.filter(slug=category_slug)
+    if cat_by_slug:
+         template_name = 'mainapp/category.html'
+         tasks = Task.objects.filter(category=cat_by_slug.id)
+         context = {
+             'title': 'PhoForum',
+             'category': category_slug,
+             'tasks': tasks
+         }
     else:
-        return render(request, 'mainapp/404.html', {'text_exeption': "Такой категории нет"}) #сделать вызов функции pageNotFound
+        template_name =  'mainapp/404.html'
+        context = {'text_exeption': "Такой категории нет"} #сделать вызов функции pageNotFound
+
+    return render(request, template_name=template_name, context=context)
 
 
 def get_task(request, category_slug, task_id):
@@ -31,13 +37,16 @@ def get_task(request, category_slug, task_id):
         'category': category_slug,
         'task_id': task_id
     }
-    if category_slug in [elem.slug for elem in Category.objects.all()] and\
-    task_id in [elem.tasks_by_category for elem in Category.objects.filter(slug=category_slug)]:
+    task_by_id, = Task.objects.filter(id=task_id)
+    if task_by_id and task_by_id.category.slug == category_slug:
         task = Task.objects.get(task_id)
         context['task'] = task
-        return render(request, 'mainapp/task.html', context=context)
+        template_name = 'mainapp/task.html'
     else:
-        return render(request, 'mainapp/404.html', {'text_exeption': "Такой категории нет"}) #сделать вызов функции pageNotFound
+        template_name = 'mainapp/404.html'
+        context = {'text_exeption': "Такой категории нет"}  # сделать вызов функции pageNotFound
+
+    return render(request, template_name=template_name, context=context)
 
 
 def pageNotFound(request, exeption):
