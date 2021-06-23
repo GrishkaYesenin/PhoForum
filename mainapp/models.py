@@ -5,6 +5,7 @@ from django.conf import settings
 # 3. Comment
 # 5. Category
 # 6. Chat
+
 from django.urls import reverse
 
 
@@ -29,7 +30,7 @@ class Task(models.Model):
         return str(self.content)
 
     def get_absolute_url(self):
-        return reverse('category', kwargs={'task_id': self.id})
+        return reverse('task', kwargs={'category_slug': self.category.slug, 'task_id': self.id})
 
     def get_name(self):
         name = ""
@@ -41,16 +42,22 @@ class Task(models.Model):
             name += str(self.year) + "г."
         return name
 
+    class Meta:
+        ordering = ['difficulty_level', 'grade', 'year']
+
 
 class Category(models.Model):
-    slug = models.SlugField(unique=True)
     name = models.CharField(max_length=100, db_index=True, verbose_name="Название раздела")
-
+    slug = models.SlugField(unique=True, db_index=True)
     def __str__(self):
         return str(self.slug)
 
     def get_absolute_url(self):
-        return reverse('home', kwargs={'category_slug': self.slug})
+        return reverse('category', kwargs={'category_slug': self.slug})
+
+    class Meta:
+        verbose_name_plural = "Categories"
+        ordering = ['name']
 
 
 
@@ -73,6 +80,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return "Message text"
+
+    class Meta:
+        ordering = ['likes', 'timestamp_create']
 
 
 class Chat(models.Model):

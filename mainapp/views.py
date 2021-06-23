@@ -1,6 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
-
 
 
 def index(request):
@@ -13,20 +12,14 @@ def index(request):
 
 
 def get_list_of_tasks(request, category_slug):
-    cat_by_slug = Category.objects.get(slug=category_slug)
-    if cat_by_slug:
-         template_name = 'mainapp/category.html'
-         tasks = Task.objects.filter(category=cat_by_slug.id)
-         context = {
-             'title': 'PhoForum',
-             'category': category_slug,
-             'tasks': tasks
-         }
-    else:
-        template_name =  'mainapp/404.html'
-        context = {'text_exeption': "Такой категории нет"} #сделать вызов функции pageNotFound
-
-    return render(request, template_name=template_name, context=context)
+    cat_by_slug = get_object_or_404(Category, slug=category_slug)
+    tasks = Task.objects.filter(category=cat_by_slug.id)
+    context = {
+         'title': 'PhoForum',
+         'category': cat_by_slug,
+         'tasks': tasks
+    }
+    return render(request, 'mainapp/category.html', context=context)
 
 
 def get_task(request, category_slug, task_id):

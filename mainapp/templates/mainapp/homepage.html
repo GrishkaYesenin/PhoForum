@@ -1,10 +1,10 @@
 {% extends 'mainapp/base.html' %}
 
 {% block content %}
-    <hi>{{ Title }}</hi>
+    <h1>{{ Title }}</h1>
     <ul>
     {% for category in categories %}
-        <li><a href={% url 'category' category_slug=category.slug %}>{{ category }}</a></li>
+        <li><a href="{{ category.get_absolute_url  }}">{{ category }}</a></li>
     {%endfor%}
     </ul>
 {% endblock content %}
