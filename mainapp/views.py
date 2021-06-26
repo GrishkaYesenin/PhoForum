@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
+from .forms import *
 
 
 def index(request):
@@ -28,16 +30,26 @@ def get_task(request, category_slug, task_id):
         'category': category_slug,
         'task_id': task_id
     }
-    task_by_id = Task.objects.get(id=task_id)
-    if task_by_id and task_by_id.category.slug == category_slug:
+    task_by_id = get_object_or_404(Task, id=task_id)
+    if task_by_id.category.slug == category_slug:
         context['task'] = task_by_id
         template_name = 'mainapp/task.html'
     else:
-        template_name = 'mainapp/404.html'
-        context = {'text_exeption': "Такой категории нет"}  # сделать вызов функции pageNotFound
+        raise Http404("Invalid path.")
 
     return render(request, template_name=template_name, context=context)
 
 
-def pageNotFound(request, exeption):
-    return render(request, 'mainapp/404.html')
+def addtask(request):
+    if request.method == 'POST':
+        form = AddTaskForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = AddTaskForm()
+    context = {
+        'title': 'PhoForum',
+        'form': form
+    }
+    return render(request, 'mainapp/addtask.html', context=context)

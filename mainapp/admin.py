@@ -3,14 +3,14 @@ from django.contrib import admin
 from .models import *
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ['content', 'resource', 'difficulty_level', 'answer', 'chat', 'category']
+    list_display = ['content', 'resource', 'difficulty_level', 'answer', 'chat', 'category', 'image']
     list_display_links = ['content']
     search_fields = ['content']
 
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
-    list_display_links = ['name', 'slug']
+    list_display_links = ['name']
     search_fields = ['name', 'slug']
     prepopulated_fields = {"slug": ("name",)}
 

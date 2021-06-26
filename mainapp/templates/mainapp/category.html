@@ -8,7 +8,12 @@
     {% for task in tasks %}
         <li>
             <h2>{{ task.get_name }}</h2>
-            <p>{{ task }}</p>
+
+            {% if task.image %}
+                <p><img class="img-article-left" src="{{ task.image.url }}"></p>
+            {% endif %}
+
+            <p>{{ task|linebreaks}}</p>
             <p><a href={% url 'task' category_slug=task.category.slug task_id=task.id %}>Ответ</a></p>
             <p><a href={% url 'task' category_slug=task.category.slug task_id=task.id %}>Решение</a></p>
             <p><a href="{{ task.get_absolute_url }}">Обсуждение</a></p>
