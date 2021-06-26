@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import *
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ['content', 'resource', 'difficulty_level', 'answer', 'chat', 'category', 'image']
+    list_display = ['content', 'resource', 'difficulty_level', 'answer', 'category', 'image']
     list_display_links = ['content']
     search_fields = ['content']
 
@@ -17,6 +17,5 @@ class CategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(Chat)
 admin.site.register(Comment)
 

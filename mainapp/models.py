@@ -2,9 +2,8 @@ from django.db import models
 from django.conf import settings
 
 # 1. Task
-# 3. Comment
-# 5. Category
-# 6. Chat
+# 2. Comment
+# 3. Category
 
 from django.urls import reverse
 
@@ -18,7 +17,6 @@ class Task(models.Model):
     grade = models.PositiveSmallIntegerField(verbose_name="Класс", blank=True, null=True)
     difficulty_level = models.PositiveSmallIntegerField(verbose_name="Уровень сложности", blank=True, null=True)
     answer = models.CharField(max_length=500, blank=True, null=True, verbose_name="Ответ")
-    chat = models.OneToOneField('Chat', on_delete=models.CASCADE, blank=True, null=True)
     category = models.ForeignKey(
         'Category',
         verbose_name="Раздел",
@@ -65,12 +63,11 @@ class Category(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Автор", on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Автор", on_delete=models.CASCADE, blank=True, null=True)
     text = models.TextField(max_length=1500)
     timestamp_create = models.DateTimeField(auto_now_add=True)
     timestamp_update = models.DateTimeField(auto_now=True)
-    likes = models.PositiveIntegerField(null=True)
-    chat = models.ForeignKey('Chat', on_delete=models.CASCADE)
+    likes = models.PositiveIntegerField(blank=True, null=True)
     parent = models.ForeignKey(
         'self',
         verbose_name="Родительский комментарий",
@@ -78,18 +75,11 @@ class Comment(models.Model):
         null=True,
         related_name='comment_children',
         on_delete=models.CASCADE
-
     )
+    task = models.ForeignKey(Task,  related_name='comment', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return "Message text"
+        return str(self.text)
 
     class Meta:
         ordering = ['likes', 'timestamp_create']
-
-
-class Chat(models.Model):
-
-
-    def __str__(self):
-        return "Chat"
