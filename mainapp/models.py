@@ -27,9 +27,11 @@ class Task(models.Model):
     def __str__(self):
         return str(self.content)
 
+    @property
     def get_absolute_url(self):
         return reverse('task', kwargs={'category_slug': self.category.slug, 'task_id': self.id})
 
+    @property
     def get_name(self):
         name = ""
         if self.resource:
@@ -51,9 +53,11 @@ class Category(models.Model):
     def __str__(self):
         return str(self.name)
 
+    @property
     def get_absolute_url(self):
         return reverse('category', kwargs={'category_slug': self.slug})
 
+    @property
     def get_num_task_by_cat(self):
         return len(Task.objects.filter(category_id=self.id))
 
@@ -76,6 +80,7 @@ class Comment(models.Model):
         related_name='comment_children',
         on_delete=models.CASCADE
     )
+    is_child = models.BooleanField(default=False)
     task = models.ForeignKey(Task,  related_name='comment', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):

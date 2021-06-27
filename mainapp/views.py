@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import *
 from .forms import *
+from .utils import create_comment_tree
 
 
 def index(request):
@@ -25,14 +25,17 @@ def get_list_of_tasks(request, category_slug):
 
 
 def get_task(request, category_slug, task_id):
-    context = {
-        'title': 'PhoForum',
-        'category': category_slug,
-        'task_id': task_id
-    }
     task_by_id = get_object_or_404(Task, id=task_id)
     if task_by_id.category.slug == category_slug:
-        context['task'] = task_by_id
+        comments = Comment.objects.filter(task_id=task_id)
+        tree = create_comment_tree(comments)
+        print(tree)
+        context = {
+            'title': 'PhoForum',
+            'task': task_by_id,
+            'comments': comments,
+            'tree': tree
+        }
         template_name = 'mainapp/task.html'
     else:
         raise Http404("Invalid path.")
