@@ -16,10 +16,6 @@
 
     <h1>Чат</h1>
     <ul>
-    {% for comment in comments %}    # |comments_filter
-        <li>{{ comment }}<br>
-        {{ comment.timestamp_create }}
-        </li>
-    {%endfor%}
+    {{ tree|comments_filter }}
     </ul>
 {% endblock content %}

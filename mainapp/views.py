@@ -29,11 +29,9 @@ def get_task(request, category_slug, task_id):
     if task_by_id.category.slug == category_slug:
         comments = Comment.objects.filter(task_id=task_id)
         tree = create_comment_tree(comments)
-        print(tree)
         context = {
             'title': 'PhoForum',
             'task': task_by_id,
-            'comments': comments,
             'tree': tree
         }
         template_name = 'mainapp/task.html'
