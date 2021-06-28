@@ -2,17 +2,16 @@
 {% load comments_tree %}
 
 {% block content %}
-    <h1>{{ title }}</h1>
 
     {% if task.title %}
-    <p>Задача{{ task.title }}</p>
+    <h3>{{ task.title }}</h3>
     {% endif %}
 
     {% if task.image %}
         <p><img class="img-article-left" src="{{ task.image.url }}"></p>
     {% endif %}
 
-    <p>Задача{{ task.content }}</p>
+    <p class="task-over-chat">Задача{{ task.content }}</p>
 
     <h1>Чат</h1>
     <ul>

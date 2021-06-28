@@ -31,6 +31,7 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('task', kwargs={'category_slug': self.category.slug, 'task_id': self.id})
 
+
     @property
     def get_name(self):
         name = ""
@@ -40,6 +41,8 @@ class Task(models.Model):
             name += str(self.grade) + "кл. "
         if self.year:
             name += str(self.year) + "г."
+        if name:
+            name = f'({name})'
         return name
 
     class Meta:

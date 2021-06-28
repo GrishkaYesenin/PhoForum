@@ -1,7 +1,7 @@
 {% extends 'mainapp/base.html' %}
 
 {% block content %}
-    <h1>{{ Title }}</h1>
+
     <form action="{% url 'addtask' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}

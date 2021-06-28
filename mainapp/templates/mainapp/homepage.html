@@ -1,8 +1,7 @@
 {% extends 'mainapp/base.html' %}
 
 {% block content %}
-    <h1>{{ Title }}</h1>
-    <ul>
+    <ul class="list-categories">
     {% for category in categories %}
         <li><a href="{{ category.get_absolute_url  }}">{{ category }} ({{ category.get_num_task_by_cat }})</a></li>
     {%endfor%}
