@@ -3,18 +3,18 @@
 
 {% block content %}
 
-    {% if task.title %}
-    <h3>{{ task.title }}</h3>
-    {% endif %}
+{% if task.title %}
+<h3>{{ task.title }}</h3>
+{% endif %}
 
-    {% if task.image %}
-        <p><img class="img-article-left" src="{{ task.image.url }}"></p>
-    {% endif %}
+{% if task.image %}
+<p><img class="img-article-left" src="{{ task.image.url }}"></p>
+{% endif %}
 
-    <p class="task-over-chat">Задача{{ task.content }}</p>
+<p class="task-over-chat">Задача{{ task.content }}</p>
 
-    <h1>Чат</h1>
-    <ul>
-    {{ tree|comments_filter }}
-    </ul>
+<h1>Чат</h1>
+<ul>
+{{ tree|comments_filter }}
+</ul>
 {% endblock content %}

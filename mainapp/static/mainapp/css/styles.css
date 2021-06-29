@@ -1,6 +1,6 @@
 body{
   font-family: sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   color: rgb(55, 53, 47);
 }
 
@@ -10,7 +10,7 @@ body{
   margin: 0; /*убираем верхнее и нижнее поле, равное 1em*/
   display: flex;
   padding-left: 0;
-  background: #fccf5b;
+  background: #bbf8fc;
   width: 100%;
   text-align: left;
 }
@@ -35,8 +35,41 @@ h1{
   font-size: 3em;
 }
 
+
+
+/*---for category.html page---*/
+
+
+p.category-title{
+  margin-left: 20px;
+  margin-bottom: 30px;
+  font-size: 1.4em;
+  color: rgba(55, 53, 47, 0.6);
+}
+
+ul.list-tasks{
+  list-style-type: none;
+  margin-left: 100px;
+  padding-left: 0;
+  margin-right: 100px;
+  max-width: 60%;
+}
+
 .task{
-  margin-top: 50px;
+  display: inline-block;
+}
+
+.task-name{
+  font-size: 1.2em;
+  margin: 20px;
+  margin-left: 0;
+}
+
+.task-img{
+  height: 200px;
+  float: right; /* Выравнивание по правому краю  */
+  margin: 0 0 20px 20px; /* Отступы вокруг картинки */
+  max-block-size: 180px;
 }
 
 .task-action{
@@ -44,6 +77,7 @@ h1{
   margin: 0; /*убираем верхнее и нижнее поле, равное 1em*/
   padding-left: 0; /*убираем левый отступ, равный 40px*/
   display: flex;
+  margin-top: 10px;
 }
 
 .task-action a{
@@ -52,32 +86,5 @@ h1{
   padding-bottom: 5px;
 }
 
-.task-name{
-  font-size: 1.2em;
-  margin: 20px;
-  margin-left: 0;
-  text-align: left;
-}
 
-
-.task-name span{
-  font-variant: small-caps;
-}
-
-
-p.category-title{
-  margin-left: 20px;
-  margin-bottom: 30px;
-  font-size: 1.8em;
-  /*font-variant: small-caps;*/
-}
-
-ul.list-tasks{
-  margin-right: 300px;
-  list-style-type: none;
-  padding-left: 20px;
-}
-
-.img-task{
-  height: 200px;
-}
+/*---for category.html page---*/

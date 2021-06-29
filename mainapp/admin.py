@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import *
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ['content', 'resource', 'difficulty_level', 'answer', 'category', 'image']
+    list_display = ['content', 'resource', 'answer', 'category', 'image']
     list_display_links = ['content']
     search_fields = ['content']
 

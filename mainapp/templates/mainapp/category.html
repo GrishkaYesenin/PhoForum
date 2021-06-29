@@ -2,28 +2,31 @@
 
 {% block content %}
 
-    <p class="category-title">Задачи по выбранной категории {{ category }}</p>
+<p class="category-title">Задачи по выбранной категории {{ category }}</p>
 
-    <ul class="list-tasks">
-    {% for task in tasks %}
-        <li class="task">
-            <div class="task-name">
-                    <span>Задача 1.</span>
-                <span class="task-name">{{ task.get_name }}</span>
-            </div>
+<ul class="list-tasks">
+{% for task in tasks %}
+    <li class="task">
+        <div class="task-name">
+            <span id="num">Задача 1.</span>
+            <span id="info">{{ task.get_name }}</span>
+        </div>
 
-            {% if task.image %}
-                <p><img class="img-task" src="{{ task.image.url }}"></p>
-            {% endif %}
+{#        <div class="task-text">{{ task }}</div>#}
 
-            <p>{{ task|linebreaks}}</p>
-            <ul class="task-action">
-                <li><a href={% url 'task' category_slug=task.category.slug task_id=task.id %}>Ответ</a></li>
-                <li><a href={% url 'task' category_slug=task.category.slug task_id=task.id %}>Решение</a></li>
-                <li><a href="{{ task.get_absolute_url }}">Обсуждение</a></li>
-            </ul>
-        </li>
-        <hr>
-    {%endfor%}
-    </ul>
+    {% if task.image %}
+        <div><img src="{{ task.image.url }}" class="task-img">{{ task }}</div>
+    {% else %}
+        <div class="task-text-if-not-img">{{ task }}</div>
+    {% endif %}
+
+        <ul class="task-action">
+            <li><a href={% url 'task' category_slug=task.category.slug task_id=task.id %}>Ответ</a></li>
+            <li><a href={% url 'task' category_slug=task.category.slug task_id=task.id %}>Решение</a></li>
+            <li><a href="{{ task.get_absolute_url }}">Обсуждение</a></li>
+        </ul>
+    </li>
+    <hr>
+{%endfor%}
+</ul>
 {% endblock content %}
