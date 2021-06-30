@@ -29,20 +29,20 @@ body{
 }
 
 h1{
-  margin: 10px;
-  margin-left: 20px;
-  margin-bottom: 30px;
+  margin: 10px 10px 30px 20px;
   font-size: 3em;
 }
 
+.content{
+  padding: 10px 96px;
+}
 
-
-/*---for category.html page---*/
+/* --- for category.html page --- */
 
 
 p.category-title{
   margin-left: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   font-size: 1.4em;
   color: rgba(55, 53, 47, 0.6);
 }
@@ -87,4 +87,4 @@ ul.list-tasks{
 }
 
 
-/*---for category.html page---*/
+/* --- for category.html page --- */

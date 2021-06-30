@@ -8,17 +8,23 @@ from django.conf import settings
 from django.urls import reverse
 
 
-GRADE_CHOICES = (range(1, 12))
+GRADE_CHOICES = (
+    ("7", 7),
+    ("8", 8),
+    ("9", 9),
+    ("10", 10),
+    ("11", 11),
+)
 
 class Task(models.Model):
-    title = models.CharField(max_length=100, verbose_name="Название задачи", blank=True, null=True)
+    title = models.CharField(max_length=100, verbose_name="Название задачи", blank=True)
     content = models.TextField(max_length=3500, verbose_name="Условие задачи")
-    image = models.ImageField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True, verbose_name="Рисунок к условию")
     resource = models.CharField(max_length=500, blank=True, verbose_name="Источник/название олимпиады")
     year = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Год")
-    grade = models.PositiveSmallIntegerField(verbose_name="Класс",  choices=GRADE_CHOICES, blank=True, null=True)
+    grade = models.PositiveSmallIntegerField(verbose_name="Класс",  choices=GRADE_CHOICES, default=None, blank=True, null=True)
     difficulty_level = models.PositiveSmallIntegerField(verbose_name="Уровень сложности", blank=True, null=True)
-    answer = models.CharField(max_length=500, blank=True, null=True, verbose_name="Ответ")
+    answer = models.CharField(max_length=500, blank=True, verbose_name="Ответ")
     category = models.ForeignKey(
         'Category',
         verbose_name="Раздел",

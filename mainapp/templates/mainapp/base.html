@@ -14,14 +14,16 @@
     <li><a href={% url 'home' %}>Выбрать раздел</a></li>
     <li><a href={% url 'info' %}>О сайте</a></li>
     <li><a href={% url 'addtask' %}>Добавить задачу</a></li>
-    <li><a href={% url 'recources' %}>Ссылки на полезные ресурсы</a></li>
+    <li><a href={% url 'ext_resources' %}>Ссылки на полезные ресурсы</a></li>
     <li><a href={% url 'login' %}>Войти</a></li>
     <li><a href={% url 'regin' %}>Зарегистрироваться</a></li>
 </ul>
 {% endblock mainmenu %}
 
+<div class="content">
 {% block content %}
 {% endblock content %}
+</div>
 
 </body>
 </html>

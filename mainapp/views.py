@@ -4,6 +4,13 @@ from .forms import *
 from .utils import create_comment_tree
 
 
+EXTERNAL_RESOURCES = {
+    'Math us!': 'https://mathus.ru/',
+    'Сборник М.Ю. Замятнина 7-8кл': 'http://karand.ru/index.php?productID=1496',
+    'Сливы Фоксфорда': 'https://github.com/limitedeternity/foxford_courses'
+}
+
+
 def index(request):
     categories = Category.objects.all()
     context = {
@@ -17,9 +24,9 @@ def get_list_of_tasks(request, category_slug):
     cat_by_slug = get_object_or_404(Category, slug=category_slug)
     tasks = Task.objects.filter(category=cat_by_slug.id)
     context = {
-         'title': 'PhoForum',
-         'category': cat_by_slug,
-         'tasks': tasks
+        'title': 'PhoForum',
+        'category': cat_by_slug,
+        'tasks': tasks
     }
     return render(request, 'mainapp/category.html', context=context)
 
@@ -54,3 +61,11 @@ def addtask(request):
         'form': form
     }
     return render(request, 'mainapp/addtask.html', context=context)
+
+
+def info(request):
+    return render(request, 'mainapp/info.html')
+
+
+def external_resources(request):
+    return render(request, 'mainapp/external_resources.html', context=EXTERNAL_RESOURCES)
