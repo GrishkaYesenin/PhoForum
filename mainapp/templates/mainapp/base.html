@@ -3,27 +3,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+{% block title %}
     <title>PhoForum</title>
+{% endblock title %}
     <link type="text/css" href="{% static 'mainapp/css/styles.css' %}" rel="stylesheet"/>
 </head>
 <body>
-<h1>PhoForum</h1>
-
-{% block mainmenu %}
-<ul class="menu">
-    <li><a href={% url 'home' %}>Выбрать раздел</a></li>
-    <li><a href={% url 'info' %}>О сайте</a></li>
-    <li><a href={% url 'addtask' %}>Добавить задачу</a></li>
-    <li><a href={% url 'ext_resources' %}>Ссылки на полезные ресурсы</a></li>
-    <li><a href={% url 'login' %}>Войти</a></li>
-    <li><a href={% url 'regin' %}>Зарегистрироваться</a></li>
-</ul>
-{% endblock mainmenu %}
+<header>
+    <h1>PhoForum</h1>
+    <nav><ul class="menu">
+        <li><a href={% url 'home' %}>Выбрать раздел</a></li>
+        <li><a href={% url 'info' %}>О сайте</a></li>
+        <li><a href={% url 'addtask' %}>Добавить задачу</a></li>
+        <li><a href={% url 'ext_resources' %}>Ссылки на полезные ресурсы</a></li>
+        <li><a href={% url 'login' %}>Войти</a></li>
+        <li><a href={% url 'regin' %}>Зарегистрироваться</a></li>
+    </ul></nav>
+</header>
 
 <div class="content">
 {% block content %}
 {% endblock content %}
 </div>
 
+<footer>Поддержка. Студентам на сухарики</footer>
 </body>
 </html>

@@ -1,3 +1,9 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+
 body{
   font-family: sans-serif;
   font-size: 15px;
@@ -7,12 +13,10 @@ body{
 
 .menu {
   list-style: none; /*убираем маркеры списка*/
-  margin: 0; /*убираем верхнее и нижнее поле, равное 1em*/
+  margin: 0 96px 0 96px; /*убираем верхнее и нижнее поле, равное 1em*/
   display: flex;
   padding-left: 0;
   background: #bbf8fc;
-  width: 100%;
-  text-align: left;
 }
 
 .menu a {
@@ -29,30 +33,33 @@ body{
 }
 
 h1{
-  margin: 10px 10px 30px 20px;
-  font-size: 3em;
+  padding: 8px 10px 25px 96px;
+  font-size: 4em;
 }
 
 .content{
-  padding: 10px 96px;
+  padding: 20px 116px;
+  margin: 0;
 }
 
+
+footer{
+  background: #202530;
+  color: white;
+}
 /* --- for category.html page --- */
 
 
-p.category-title{
-  margin-left: 20px;
-  margin-bottom: 20px;
+.category-title{
+  margin: 20px 0 30px 0;
   font-size: 1.4em;
   color: rgba(55, 53, 47, 0.6);
 }
 
-ul.list-tasks{
-  list-style-type: none;
-  margin-left: 100px;
+ol.list-tasks{
   padding-left: 0;
-  margin-right: 100px;
   max-width: 60%;
+  list-style-position: inside;
 }
 
 .task{
@@ -63,6 +70,19 @@ ul.list-tasks{
   font-size: 1.2em;
   margin: 20px;
   margin-left: 0;
+}
+
+
+.task-name:before {
+	content: counter(num) '.';
+	counter-increment: num;
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: -26px;
+	width: 20px;
+	color: #ef6780;
+	text-align: right;
 }
 
 .task-img{
