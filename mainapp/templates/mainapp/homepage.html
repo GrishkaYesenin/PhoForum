@@ -3,7 +3,7 @@
 {% block content %}
 <ul class="list-categories">
 {% for category in categories %}
-    <li><a target="_blank" href="{{ category.get_absolute_url  }}">{{ category }} ({{ category.get_num_task_by_cat }})</a></li>
+    <li class="point-category"><a href="{{ category.get_absolute_url  }}"><span id="name">{{ category }}</span> ({{ category.get_num_task_by_cat }})</a></li>
 {%endfor%}
 </ul>
 {% endblock content %}

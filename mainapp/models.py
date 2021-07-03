@@ -9,11 +9,11 @@ from django.urls import reverse
 
 
 GRADE_CHOICES = (
-    ("7", 7),
-    ("8", 8),
-    ("9", 9),
-    ("10", 10),
-    ("11", 11),
+    (7, "7"),
+    (8, "8"),
+    (9, "9"),
+    (10, "10"),
+    (11, "11"),
 )
 
 class Task(models.Model):
@@ -22,7 +22,7 @@ class Task(models.Model):
     image = models.ImageField(blank=True, null=True, verbose_name="Рисунок к условию")
     resource = models.CharField(max_length=500, blank=True, verbose_name="Источник/название олимпиады")
     year = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Год")
-    grade = models.PositiveSmallIntegerField(verbose_name="Класс",  choices=GRADE_CHOICES, default=None, blank=True, null=True)
+    grade = models.IntegerField(verbose_name="Класс",  choices=GRADE_CHOICES, default=None, blank=True, null=True)
     difficulty_level = models.PositiveSmallIntegerField(verbose_name="Уровень сложности", blank=True, null=True)
     answer = models.CharField(max_length=500, blank=True, verbose_name="Ответ")
     category = models.ForeignKey(

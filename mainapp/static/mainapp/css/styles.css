@@ -1,109 +1,156 @@
+/*Обнуление*/
 *{
-  margin: 0;
-  padding: 0;
+	padding: 0;
+	margin: 0;
+	border: 0;
 }
+*,*:before,*:after{
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+:focus,:active{outline: none;}
+a:focus,a:active{outline: none;}
 
+nav,footer,header,aside{display: block;}
+
+html,body{
+	height: 100%;
+	width: 100%;
+	font-size: 100%;
+	line-height: 1;
+	font-size: 15px;
+	-ms-text-size-adjust: 100%;
+	-moz-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+}
+input,button,textarea{font-family:inherit;}
+
+input::-ms-clear{display: none;}
+button{cursor: pointer;}
+button::-moz-focus-inner {padding:0;border:0;}
+a, a:visited{text-decoration: none;}
+a:hover{text-decoration: none;}
+ul li{list-style: none;}
+img{vertical-align: top;}
+
+h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
+/*--------------------*/
 
 body{
-  font-family: sans-serif;
-  font-size: 15px;
-  color: rgb(55, 53, 47);
+    font-family: sans-serif;
+    color: rgb(55, 53, 47);
+    font-size: 15px;
+    line-height: 1.5;
 }
 
+a{
+  text-decoration: none; /*убираем подчеркивание текста ссылок*/
+  display: inline-block;
+}
+
+a:hover{
+    /*background: #D3D1CB;*/
+    text-decoration: underline;
+}
+
+a:visited{
+    color: inherit;
+}
+
+.list-categories li:hover{
+    background: #D3D1CB;
+    text-decoration: none;
+}
 
 .menu {
-  list-style: none; /*убираем маркеры списка*/
-  margin: 0 96px 0 96px; /*убираем верхнее и нижнее поле, равное 1em*/
-  display: flex;
-  padding-left: 0;
-  background: #bbf8fc;
+    list-style: none; /*убираем маркеры списка*/
+    margin: 0 96px 0 76px; /*убираем верхнее и нижнее поле, равное 1em*/
+    display: flex;
+    padding-left: 0;
 }
 
 .menu a {
-  text-decoration: none; /*убираем подчеркивание текста ссылок*/
-  display: inline-block;
-  padding: 10px;
-  padding-left: 20px;
+    padding: 10px;
+    padding-left: 20px;
 }
 
-.list-categories a, .task-action a{
-  text-decoration: none; /*убираем подчеркивание текста ссылок*/
-  display: inline-block;
-  padding: 10px;
-}
 
 h1{
-  padding: 8px 10px 25px 96px;
-  font-size: 4em;
+    padding: 25px 10px 40px 76px;
+    font-size: 4em;
+    font-weight: 700;
+    line-height: 1.2;
 }
 
 .content{
-  padding: 20px 116px;
-  margin: 0;
+    padding: 20px 116px;
+    margin: 0;
 }
 
 
 footer{
-  background: #202530;
-  color: white;
+    background: #202530;
+    color: white;
+    text-align: center;
 }
 /* --- for category.html page --- */
 
+.list-categories{
+    width: 200px;
+}
+
+.list-categories li{
+    margin: 10px 0;
+    font-weight: 700;
+}
 
 .category-title{
-  margin: 20px 0 30px 0;
-  font-size: 1.4em;
-  color: rgba(55, 53, 47, 0.6);
+    margin: 20px 0 30px 0;
+    font-size: 1.4em;
+    color: rgba(55, 53, 47, 0.6);
 }
 
 ol.list-tasks{
-  padding-left: 0;
-  max-width: 60%;
-  list-style-position: inside;
+    padding-left: 0;
+    width: 800px;
+    list-style-position: inside;
+  /*border: 1px solid #000;*/
 }
 
 .task{
-  display: inline-block;
+    padding: 0 10px;
+    display: inline-block;
+    border: 1px solid #D3D1CB;
+    width: 100%;
+    margin-bottom: 10px;
+    box-shadow: rgba(15, 15, 15, 0.1) 0 0 0 1px, rgba(15, 15, 15, 0.1) 0 2px 4px;
+    background: #EDECE9;
 }
 
 .task-name{
-  font-size: 1.2em;
-  margin: 20px;
-  margin-left: 0;
-}
-
-
-.task-name:before {
-	content: counter(num) '.';
-	counter-increment: num;
-	display: inline-block;
-	position: absolute;
-	top: 0;
-	left: -26px;
-	width: 20px;
-	color: #ef6780;
-	text-align: right;
+    font-size: 1.2em;
+    margin: 10px 20px 20px 0;
 }
 
 .task-img{
-  height: 200px;
-  float: right; /* Выравнивание по правому краю  */
-  margin: 0 0 20px 20px; /* Отступы вокруг картинки */
-  max-block-size: 180px;
+    float: right; /* Выравнивание по правому краю  */
+    margin: 0 0 20px 20px; /* Отступы вокруг картинки */
+    max-block-size: 180px;
 }
 
 .task-action{
-  list-style: none; /*убираем маркеры списка*/
-  margin: 0; /*убираем верхнее и нижнее поле, равное 1em*/
-  padding-left: 0; /*убираем левый отступ, равный 40px*/
-  display: flex;
-  margin-top: 10px;
+    list-style: none; /*убираем маркеры списка*/
+    margin: 0; /*убираем верхнее и нижнее поле, равное 1em*/
+    padding-left: 0; /*убираем левый отступ, равный 40px*/
+    display: flex;
+    color: blue;
 }
 
-.task-action a{
-  padding-top: 5px;
-  padding-left: 0;
-  padding-bottom: 5px;
+
+
+.task-action li{
+    padding: 10px 10px 10px 0;
 }
 
 
