@@ -6,7 +6,7 @@ from django.conf import settings
 # 3. Category
 
 from django.urls import reverse
-
+import Levenshtein
 
 GRADE_CHOICES = (
     (7, "7"),
@@ -15,6 +15,16 @@ GRADE_CHOICES = (
     (10, "10"),
     (11, "11"),
 )
+
+class SimilarTaskManager(models.Manager):
+    def get(self, selected_task: Task):
+        '''Returns list of simmilar tasks to selected'''
+        tasks = self.model.objects.all()
+        result = []
+        for task in tasks:
+            if Levenshtein.disctance(task.content, selected_task.content) >= 20: # Нужно подобрать оптимальный порог. Мб все таки использовать difflib ratio
+                result.append(task)
+        return result
 
 class Task(models.Model):
     title = models.CharField(max_length=100, verbose_name="Название задачи", blank=True)
@@ -31,6 +41,9 @@ class Task(models.Model):
         on_delete=models.CASCADE,
         blank=True, null=True
     )
+    
+    objects = models.Manager()
+    similar = SimilarTaskManager()
 
     def __str__(self):
         return str(self.content)
