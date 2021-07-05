@@ -6,7 +6,7 @@ from django.conf import settings
 # 3. Category
 
 from django.urls import reverse
-import Levenshtein
+from difflib import SequenceMatcher as SM
 
 GRADE_CHOICES = (
     (7, "7"),
@@ -17,12 +17,12 @@ GRADE_CHOICES = (
 )
 
 class SimilarTaskManager(models.Manager):
-    def get(self, selected_task: Task):
+    def get(self, selected_task):
         '''Returns list of simmilar tasks to selected'''
         tasks = self.model.objects.all()
         result = []
         for task in tasks:
-            if Levenshtein.disctance(task.content, selected_task.content) >= 20: # Нужно подобрать оптимальный порог. Мб все таки использовать difflib ratio
+            if SM(None, task.content, selected_task.content).ratio() >= 0.7: # Мб стоит подобрать более оптимальный порог
                 result.append(task)
         return result
 
@@ -112,3 +112,4 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['likes', 'timestamp_create']
+
