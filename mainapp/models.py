@@ -73,6 +73,8 @@ class Task(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, verbose_name="Название раздела")
     slug = models.SlugField(unique=True, db_index=True)
+    parent_category = models.ForeignKey('ParentCategory',  verbose_name="из раздела", on_delete=models.CASCADE,
+        blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
@@ -88,6 +90,20 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "Categories"
         ordering = ['name']
+
+
+class ParentCategory(models.Model):
+    name = models.CharField(max_length=100, db_index=True, verbose_name="Название раздела")
+
+    def __str__(self):
+        return str(self.name)
+
+    @property
+    def get_categories_by_parent(self):
+        return Category.objects.filter(parent_category=self.id)
+
+    class Meta:
+        verbose_name_plural = "Parent Categories"
 
 
 class Comment(models.Model):

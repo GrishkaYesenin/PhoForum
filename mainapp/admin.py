@@ -18,4 +18,5 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Comment)
+admin.site.register(ParentCategory)
 

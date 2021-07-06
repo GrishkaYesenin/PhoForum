@@ -12,10 +12,10 @@ EXTERNAL_RESOURCES = {
 
 
 def index(request):
-    categories = Category.objects.all()
+    parent_categories = ParentCategory.objects.all()
     context = {
         'title': 'PhoForum',
-        'categories': categories
+        'p_categories': parent_categories
     }
     return render(request, 'mainapp/homepage.html', context=context)
 
