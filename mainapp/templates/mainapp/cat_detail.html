@@ -1,0 +1,22 @@
+{% extends 'mainapp/base.html' %}
+
+{% block title %}
+    <title>{{ category }}</title>
+{% endblock title %}
+
+{% block sidebar %}
+    {% include 'mainapp/cat_sidebar.html' with p_categories=p_categories categories=categories %}
+{% endblock sidebar %}
+
+{% block page_content %}
+    <p class="category-title">Задачи по выбранной категории {{ category }}</p>
+
+    <ol class="list-tasks">
+        {% for task in tasks %}
+            {% include 'mainapp/task_block.html' with task=task %}
+        {%endfor%}
+    </ol>
+    {% include 'mainapp/pagination.html' with page=tasks %}
+{% endblock page_content %}
+
+

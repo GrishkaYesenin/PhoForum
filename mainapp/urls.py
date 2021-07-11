@@ -9,6 +9,6 @@ urlpatterns = [
     path('login/', index, name='login'),
     path('regin/', index, name='regin'),
     path('addtask/', addtask, name='addtask'),
-    path('<slug:category_slug>/', get_list_of_tasks, name='category'),
-    path('<slug:category_slug>/<int:task_id>', get_task, name='task')
+    path('<slug:category_slug>/', category_detail, name='category_detail'),
+    path('<slug:category_slug>/<int:task_id>', task_detail, name='task_detail')
 ]

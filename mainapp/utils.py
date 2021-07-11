@@ -6,8 +6,8 @@ def get_children(children_qs):
             'author': comment.author,
             'id': comment.id,
             'text': comment.text,
-            'timestamp_create': comment.timestamp_create.strftime('%Y-%m-%d %H:%M'),
-            'timestamp_update': comment.timestamp_update.strftime('%Y-%m-%d %H:%M'),
+            'created': comment.created.strftime('%Y-%m-%d %H:%M'),
+            'updated': comment.updated.strftime('%Y-%m-%d %H:%M'),
             'is_child': comment.is_child,
             'parent_id': comment.parent_id
         }
@@ -27,8 +27,8 @@ def create_comment_tree(qs):    #qs-queryset
             'author': comment.author,
             'id': comment.id,
             'text': comment.text,
-            'timestamp_create': comment.timestamp_create.strftime('%Y-%m-%d %H:%M'),
-            'timestamp_update': comment.timestamp_update.strftime('%Y-%m-%d %H:%M'),
+            'created': comment.created.strftime('%Y-%m-%d %H:%M'),
+            'updated': comment.updated.strftime('%Y-%m-%d %H:%M'),
             'is_child': comment.is_child,
             'parent_id': comment.parent_id
         }

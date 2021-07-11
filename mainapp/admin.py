@@ -19,7 +19,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ['author', 'text']
     list_display_links = ['text']
     search_fields = ['author']
-    date_hierarchy = 'timestamp_create'
+
 
 
 admin.site.register(Task, TaskAdmin)

@@ -44,6 +44,8 @@ body{
     line-height: 1.5;
 }
 
+
+
 a{
   text-decoration: none; /*убираем подчеркивание текста ссылок*/
   display: inline-block;
@@ -85,7 +87,7 @@ h1{
     line-height: 1.2;
 }
 
-#page-content{
+#wrapper{
     padding: 30px 96px;
     margin: 0;
     display: flex;
@@ -98,6 +100,7 @@ footer{
     text-align: center;
     width: 100%;
     flex-shrink: 0;
+    display: none;
 }
 
 
@@ -118,13 +121,13 @@ footer{
 /*--------------------*/
 
 
-/*for cat-content.html page*/
+/*for cat_detail.html page*/
 
 /*#category-content{*/
 /*    width: 200px;*/
 /*}*/
 
-#category-content li{
+#page-content li{
     margin: 10px 0;
     font-weight: 700;
 }
@@ -135,12 +138,17 @@ footer{
     color: rgba(55, 53, 47, 0.6);
 }
 
-#category-content{
-    margin-left: 40px;
+#page-content{
+    margin-left: 80px;
     padding-left: 0;
     width: 800px;
     list-style-position: inside;
   /*border: 1px solid #000;*/
+}
+
+#category-sidebar{
+    /*border-right: 1px solid #D3D1CB;*/
+    padding-right: 20px;
 }
 
 .task{
@@ -150,6 +158,7 @@ footer{
     width: 100%;
     margin-bottom: 10px;
     box-shadow: rgba(15, 15, 15, 0.1) 0 0 0 1px, rgba(15, 15, 15, 0.1) 0 2px 4px;
+    border-radius: 5px;
     /*background: #EDECE9;*/
 }
 
@@ -179,4 +188,20 @@ footer{
 }
 
 
-/* --- for cat-content.html page --- */
+/* --- for cat_detail.html page --- */
+
+.title-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment{
+    padding: 20px 0;
+}
+
+.comment .text{
+    border: 1px solid #D3D1CB;
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 5px;
+}

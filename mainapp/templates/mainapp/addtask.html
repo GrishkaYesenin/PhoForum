@@ -1,10 +1,9 @@
 {% extends 'mainapp/base.html' %}
 
-{% block content %}
-
-<form action="{% url 'addtask' %}" method="post">
-{% csrf_token %}
-{{ form.as_p }}
-<button type="submit">Добавить</button>
-</form>
-{% endblock content %}
+{% block page_content %}
+    <form action="{% url 'addtask' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Добавить</button>
+    </form>
+{% endblock page_content %}

@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <script id='MathJax script' async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.0/es5/tex-mml-chtml.js"></script>
+
 {% block title %}
     <title>PhoForum</title>
 {% endblock title %}
+
     <link type="text/css" href="{% static 'mainapp/css/styles.css' %}" rel="stylesheet"/>
 </head>
 <body>
@@ -22,16 +24,16 @@
     </ul></nav>
 </header>
 
-<div id="page-content">
-<div id="sidebar">
-{% block sidebar %}
-{% endblock sidebar %}
-</div>
+<div id="wrapper">
+    <div id="category-sidebar">
+        {% block sidebar %}
+        {% endblock sidebar %}
+    </div>
 
-<div id="category-content">
-{% block category-content %}
-{% endblock category-content %}
-</div>
+    <div id="page-content">
+        {% block page_content %}
+        {% endblock page_content %}
+    </div>
 </div>
 
 <footer>Поддержка. Студентам на сухарики</footer>
