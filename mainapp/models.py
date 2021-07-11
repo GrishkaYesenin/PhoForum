@@ -71,10 +71,9 @@ class Task(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, db_index=True, verbose_name="Название раздела")
+    name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(unique=True, db_index=True)
-    parent_category = models.ForeignKey('ParentCategory',  verbose_name="из раздела", on_delete=models.CASCADE,
-        blank=True, null=True)
+    parent_category = models.ForeignKey('ParentCategory',  verbose_name="Категория из раздела", on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
@@ -121,7 +120,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE
     )
     is_child = models.BooleanField(default=False)
-    task = models.ForeignKey(Task,  related_name='comment', on_delete=models.CASCADE, blank=True, null=True)
+    task = models.ForeignKey(Task,  related_name='comments', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return str(self.text)

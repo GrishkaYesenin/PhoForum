@@ -22,9 +22,16 @@
     </ul></nav>
 </header>
 
-<div class="content">
-{% block content %}
-{% endblock content %}
+<div id="page-content">
+<div id="sidebar">
+{% block sidebar %}
+{% endblock sidebar %}
+</div>
+
+<div id="category-content">
+{% block category-content %}
+{% endblock category-content %}
+</div>
 </div>
 
 <footer>Поддержка. Студентам на сухарики</footer>

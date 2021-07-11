@@ -2,7 +2,12 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from .utils import create_comment_tree
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+ADD_PAGINATION = True
+
+
+NUM_TASKS_ON_THE_PAGE = 2
 
 EXTERNAL_RESOURCES = {
     'Math us!': 'https://mathus.ru/',
@@ -11,24 +16,40 @@ EXTERNAL_RESOURCES = {
 }
 
 
+CATEGORY_MENU = {'p_categories': ParentCategory.objects.all(), 'categories': Category.objects.all()}
+
+
 def index(request):
-    parent_categories = ParentCategory.objects.all()
     context = {
+        'p_categories': CATEGORY_MENU['p_categories'],
+        'categories': CATEGORY_MENU['categories'],
         'title': 'PhoForum',
-        'p_categories': parent_categories
+        'is_start_page': True,
     }
-    return render(request, 'mainapp/homepage.html', context=context)
+    return render(request, 'mainapp/cat-content.html', context=context)
 
 
 def get_list_of_tasks(request, category_slug):
     cat_by_slug = get_object_or_404(Category, slug=category_slug)
-    tasks = Task.objects.filter(category=cat_by_slug.id)
+    task_list = Task.objects.filter(category=cat_by_slug.id)
+    paginator = Paginator(task_list, NUM_TASKS_ON_THE_PAGE)
+    page = request.GET.get('page')
+    try:
+        tasks = paginator.page(page)
+    except PageNotAnInteger:
+        tasks = paginator.page(1)
+    except EmptyPage:
+        tasks = paginator.page(paginator.num_pages)
     context = {
-        'title': 'PhoForum',
+        'p_categories': CATEGORY_MENU['p_categories'],
+        'categories': CATEGORY_MENU['categories'],
+        'title': cat_by_slug,
+        'is_start_page': False,
         'category': cat_by_slug,
+        'page': page,
         'tasks': tasks
     }
-    return render(request, 'mainapp/category.html', context=context)
+    return render(request, 'mainapp/cat-content.html', context=context)
 
 
 def get_task(request, category_slug, task_id):
