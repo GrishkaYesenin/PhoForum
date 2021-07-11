@@ -16,6 +16,7 @@ GRADE_CHOICES = (
     (11, "11"),
 )
 
+
 class SimilarTaskManager(models.Manager):
     def get(self, selected_task):
         '''Returns list of simmilar tasks to selected'''
@@ -25,6 +26,7 @@ class SimilarTaskManager(models.Manager):
             if SM(None, task.content, selected_task.content).ratio() >= 0.7: # Мб стоит подобрать более оптимальный порог
                 result.append(task)
         return result
+
 
 class Task(models.Model):
     title = models.CharField(max_length=100, verbose_name="Название задачи", blank=True)
@@ -38,6 +40,7 @@ class Task(models.Model):
     category = models.ForeignKey(
         'Category',
         verbose_name="Раздел",
+        related_name='tasks',
         on_delete=models.CASCADE,
         blank=True, null=True
     )
@@ -50,7 +53,7 @@ class Task(models.Model):
 
     @property
     def get_absolute_url(self):
-        return reverse('task', kwargs={'category_slug': self.category.slug, 'task_id': self.id})
+        return reverse('task_detail', kwargs={'category_slug': self.category.slug, 'task_id': self.id})
 
 
     @property
@@ -73,14 +76,14 @@ class Task(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(unique=True, db_index=True)
-    parent_category = models.ForeignKey('ParentCategory',  verbose_name="Категория из раздела", on_delete=models.CASCADE, blank=True, null=True)
+    parent_category = models.ForeignKey('ParentCategory',  verbose_name="Категория из раздела", related_name='children_cat', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
 
     @property
     def get_absolute_url(self):
-        return reverse('category', kwargs={'category_slug': self.slug})
+        return reverse('category_detail', kwargs={'category_slug': self.slug})
 
     @property
     def get_num_task_by_cat(self):
@@ -108,8 +111,8 @@ class ParentCategory(models.Model):
 class Comment(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Автор", on_delete=models.CASCADE, blank=True, null=True)
     text = models.TextField(max_length=1500)
-    timestamp_create = models.DateTimeField(auto_now_add=True)
-    timestamp_update = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     likes = models.PositiveIntegerField(blank=True, null=True)
     parent = models.ForeignKey(
         'self',
@@ -126,5 +129,5 @@ class Comment(models.Model):
         return str(self.text)
 
     class Meta:
-        ordering = ['likes', 'timestamp_create']
+        ordering = ['likes', 'created']
 

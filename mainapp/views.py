@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 ADD_PAGINATION = True
 
 
-NUM_TASKS_ON_THE_PAGE = 2
+NUM_TASKS_ON_THE_PAGE = 4
 
 EXTERNAL_RESOURCES = {
     'Math us!': 'https://mathus.ru/',
@@ -24,18 +24,17 @@ def index(request):
         'p_categories': CATEGORY_MENU['p_categories'],
         'categories': CATEGORY_MENU['categories'],
         'title': 'PhoForum',
-        'is_start_page': True,
     }
-    return render(request, 'mainapp/cat-content.html', context=context)
+    return render(request, 'mainapp/home.html', context=context)
 
 
-def get_list_of_tasks(request, category_slug):
+def category_detail(request, category_slug):
     cat_by_slug = get_object_or_404(Category, slug=category_slug)
-    task_list = Task.objects.filter(category=cat_by_slug.id)
+    task_list = cat_by_slug.tasks.all()
     paginator = Paginator(task_list, NUM_TASKS_ON_THE_PAGE)
-    page = request.GET.get('page')
+    curr_page = request.GET.get('page')
     try:
-        tasks = paginator.page(page)
+        tasks = paginator.page(curr_page)
     except PageNotAnInteger:
         tasks = paginator.page(1)
     except EmptyPage:
@@ -44,29 +43,38 @@ def get_list_of_tasks(request, category_slug):
         'p_categories': CATEGORY_MENU['p_categories'],
         'categories': CATEGORY_MENU['categories'],
         'title': cat_by_slug,
-        'is_start_page': False,
         'category': cat_by_slug,
-        'page': page,
-        'tasks': tasks
+        'curr_page': curr_page,
+        'tasks': tasks,
     }
-    return render(request, 'mainapp/cat-content.html', context=context)
+    return render(request, 'mainapp/cat_detail.html', context=context)
 
 
-def get_task(request, category_slug, task_id):
+def task_detail(request, category_slug, task_id):
     task_by_id = get_object_or_404(Task, id=task_id)
     if task_by_id.category.slug == category_slug:
-        comments = Comment.objects.filter(task_id=task_id)
-        tree = create_comment_tree(comments)
+        comments = task_by_id.comments.all()
+        new_comment = None
+        if request.method == 'POST':
+            comment_form = CommentForm(request.POST, request.FILES)
+            if comment_form.is_valid():
+                new_comment = comment_form.save(commit=False)
+                new_comment.task = task_by_id
+                new_comment.save()
+        else:
+            comment_form = CommentForm()
         context = {
+            'p_categories': CATEGORY_MENU['p_categories'],
+            'categories': CATEGORY_MENU['categories'],
             'title': 'PhoForum',
             'task': task_by_id,
-            'tree': tree
+            'comments': comments,
+            'new_comment': new_comment,
+            'comment_form': comment_form
         }
-        template_name = 'mainapp/task.html'
     else:
         raise Http404("Invalid path.")
-
-    return render(request, template_name=template_name, context=context)
+    return render(request, template_name='mainapp/task_detail.html', context=context)
 
 
 def addtask(request):
@@ -77,11 +85,11 @@ def addtask(request):
             return redirect('home')
     else:
         form = AddTaskForm()
-    context = {
-        'title': 'PhoForum',
-        'form': form
-    }
-    return render(request, 'mainapp/addtask.html', context=context)
+        context = {
+            'title': 'PhoForum',
+            'form': form
+        }
+        return render(request, 'mainapp/addtask.html', context=context)
 
 
 def info(request):

@@ -16,3 +16,8 @@ class AddTaskForm(forms.ModelForm):
                 raise Exception("Task is very simmilar") #TODO Shoow error msg to user
         super().save()
         return task
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['author', 'text']
