@@ -1,24 +1,29 @@
 {% extends 'mainapp/base.html' %}
 {% load comments_tree %}
+{% load show_sidebar %}
 
-{% block sidebar %}
-    {% include 'mainapp/cat_sidebar.html' with p_categories=p_categories categories=categories %}
-{% endblock sidebar %}
+{% show_sidebar %}
 
 {% block page_content %}
     {% include 'mainapp/task_block.html' with task=task %}
 
-    {% for comment in comments %}
-        <div class="comment">
+    <p>{{ solutions.count }} решений</p>
+    {% for solution in solutions %}
+        <div class="solution">
             <div class="title-container">
-                <div class="author">{{ comment.author }}</div>
-                <div class="created">{{ comment.created }}</div>
+                <div class="author">{{ solution.author }}</div>
+                <div class="created">{{ solution.created }}</div>
             </div>
-            <div class="text">{{ comment.text }}</div>
-            {% if comment.updated != comment.created %}
-                <div class="updated">upd: {{ comment.updated }}</div>
+            <div class="text">{{ solution.body }}</div>
+            {% if solution.updated != solution.created %}
+                <div class="updated">upd: {{ solution.updated }}</div>
             {% endif %}
+            <p>Комментарии:</p>
+            <div class="comments-after-solution">
+                {% include 'mainapp/comment_list.html' with commnets=solution.comments.all %}
+                {% include 'mainapp/comment_form.html' with form=comment_form %}
+            </div>
         </div>
     {% endfor %}
-    {% include 'mainapp/chat.html' with form=comment_form %}
+    {% include 'mainapp/solution_form.html' with form=solution_form new_solution=new_solution%}
 {% endblock page_content %}

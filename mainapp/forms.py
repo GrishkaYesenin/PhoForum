@@ -21,3 +21,13 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['author', 'text']
+
+class SolutionForm(forms.ModelForm):
+    class Meta:
+        model = Solution
+        fields = ['author', 'body']
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)

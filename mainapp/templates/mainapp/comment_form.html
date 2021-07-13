@@ -1,0 +1,9 @@
+<div class="comment-form">
+    <h3>Комментировать:</h3>
+    <form action="#" method="post">
+    {% csrf_token %}
+        <p>dddd{{ form }}</p>
+    {{ form.as_p }}
+    <button type="submit">Добавить</button>
+    </form>
+</div>

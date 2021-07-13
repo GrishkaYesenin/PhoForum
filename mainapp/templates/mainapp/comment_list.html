@@ -1,0 +1,13 @@
+{% for comment in comments %}
+    <div class="comment">
+        <div class="title-container">
+            <div class="author">{{ comment.author }}</div>
+            <div class="created">{{ comment.created }}</div>
+        </div>
+        <div class="text">{{ comment.text }}</div>
+        {% if comment.updated != comment.created %}
+            <div class="updated">upd: {{ comment.updated }}</div>
+        {% endif %}
+    </div>
+{% endfor %}
+<p>{{ comment_form }}</p>

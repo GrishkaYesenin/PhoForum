@@ -117,17 +117,31 @@ class Comment(models.Model):
     parent = models.ForeignKey(
         'self',
         verbose_name="Родительский комментарий",
-        blank=True,
-        null=True,
+        blank=True, null=True,
         related_name='comment_children',
         on_delete=models.CASCADE
     )
     is_child = models.BooleanField(default=False)
-    task = models.ForeignKey(Task,  related_name='comments', on_delete=models.CASCADE, blank=True, null=True)
+    solution = models.ForeignKey('Solution',  related_name='comments', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return str(self.text)
 
     class Meta:
         ordering = ['likes', 'created']
+
+class Solution(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Автор", on_delete=models.CASCADE, blank=True, null=True)
+    body = models.TextField(max_length=1500)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    voices = models.PositiveIntegerField(blank=True, null=True)
+    task = models.ForeignKey(Task, related_name='solutions', on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.body[:20])
+
+    class Meta:
+        ordering = ['voices']
+
 

@@ -87,7 +87,7 @@ h1{
     line-height: 1.2;
 }
 
-#wrapper{
+.wrapper{
     padding: 30px 96px;
     margin: 0;
     display: flex;
@@ -127,7 +127,7 @@ footer{
 /*    width: 200px;*/
 /*}*/
 
-#page-content li{
+.page-content li{
     margin: 10px 0;
     font-weight: 700;
 }
@@ -138,7 +138,7 @@ footer{
     color: rgba(55, 53, 47, 0.6);
 }
 
-#page-content{
+.page-content{
     margin-left: 80px;
     padding-left: 0;
     width: 800px;
@@ -146,7 +146,7 @@ footer{
   /*border: 1px solid #000;*/
 }
 
-#category-sidebar{
+.category-sidebar{
     /*border-right: 1px solid #D3D1CB;*/
     padding-right: 20px;
 }

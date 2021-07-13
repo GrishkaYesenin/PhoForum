@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 
 from .models import *
 
@@ -16,8 +17,13 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['author', 'text']
+    list_display = ['author', 'text', 'created', 'updated']
     list_display_links = ['text']
+    search_fields = ['author']
+
+class SolutionAdmin(admin.ModelAdmin):
+    list_display = ['author', 'body', 'created', 'updated']
+    list_display_links = ['body']
     search_fields = ['author']
 
 
@@ -25,5 +31,6 @@ class CommentAdmin(admin.ModelAdmin):
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(Solution, SolutionAdmin)
 admin.site.register(ParentCategory)
 

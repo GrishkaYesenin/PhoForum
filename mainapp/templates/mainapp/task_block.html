@@ -1,9 +1,8 @@
 <li class="task">
     <div class="task-name">
-        <span id="num">Задача 1.</span>
+        <span id="num">Задача №{{ num }}.</span>
         <span id="info">{{ task.get_name }}</span>
     </div>
-
     {% if task.image %}
         <div><img src="{{ task.image.url }}" class="task-img">{{ task }}</div>
     {% else %}
