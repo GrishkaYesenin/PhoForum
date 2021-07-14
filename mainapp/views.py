@@ -5,6 +5,10 @@ from django.contrib.auth import authenticate, login
 from .forms import LoginForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from django.views.generic import DetailView, ListView
+from django.contrib.auth.views import LoginView, LogoutView
+
+
 ADD_PAGINATION = True
 
 
@@ -17,12 +21,25 @@ EXTERNAL_RESOURCES = {
 }
 
 
+class TaskList(ListView):
+    context_object_name = 'tasks'
+    template_name = 'mainapp/cat_detail.html'
+
+    def get_queryset(self, **kwargs):
+        self.category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
+        return self.category.tasks.all()
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.kwargs['category_slug']
+        context['category'] = self.category
+        return context
+
 
 
 def index(request):
-    context = {
-        'title': 'PhoForum',
-    }
+    context = {'title': 'PhoForum'}
     return render(request, 'mainapp/home.html', context=context)
 
 
@@ -33,7 +50,7 @@ def category_detail(request, category_slug):
     curr_page = request.GET.get('page')
     try:
         tasks = paginator.page(curr_page)
-        start_index_on_curr_page = (curr_page - 1) * NUM_TASKS_ON_THE_PAGE + 1
+        start_index_on_curr_page = (int(curr_page)-1)*NUM_TASKS_ON_THE_PAGE
     except PageNotAnInteger:
         tasks = paginator.page(1)
         start_index_on_curr_page = 1
@@ -49,6 +66,20 @@ def category_detail(request, category_slug):
     }
     return render(request, 'mainapp/cat_detail.html', context=context)
 
+
+# class TaskDetail(ListView):
+#     context_object_name = 'solutions'
+#     template_name='mainapp/task_detail.html'
+#
+#     def get_queryset(self, **kwargs):
+#         return get_object_or_404(Task, id=self.kwargs['task_id'])
+#
+#     def get_context_data(self, **kwargs):
+#         # Call the base implementation first to get a context
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = self.kwargs['category_slug']
+#         context['category'] = self.category
+#         return context
 
 def task_detail(request, category_slug, task_id):
     task_by_id = get_object_or_404(Task, id=task_id)
@@ -102,16 +133,19 @@ def create_comment(request, solution_id):
 
 
 def add_task(request):
+    new_task = None
     if request.method == 'POST':
-        form = AddTaskForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
+        task_form = AddTaskForm(request.POST, request.FILES)
+        if task_form.is_valid():
+            new_task = task_form.save(commit=False)
+            new_task.save()
             return redirect('home')
     else:
-        form = AddTaskForm()
+        task_form = AddTaskForm()
         context = {
             'title': 'PhoForum',
-            'form': form
+            'new_task': new_task,
+            'form': task_form,
         }
         return render(request, 'mainapp/add_task.html', context=context)
 
@@ -141,3 +175,11 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'mainapp/login.html', {'form': form})
+
+
+class UserLogin(LoginView):
+    template_name = 'mainapp/Registration/login.html'
+
+
+class UserLogout(LogoutView):
+    template_name = 'mainapp/Registration/logout.html'

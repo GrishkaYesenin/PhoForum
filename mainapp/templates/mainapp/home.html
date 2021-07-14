@@ -1,9 +1,5 @@
 {% extends 'mainapp/base.html' %}
 
 {% block title %}
-    <title>{{ category }}</title>
+    <title>{{ title }}</title>
 {% endblock title %}
-
-{% block sidebar %}
-    {% include 'mainapp/cat_sidebar.html' with p_categories=p_categories categories=categories %}
-{% endblock sidebar %}

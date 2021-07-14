@@ -9,7 +9,7 @@
                     стр. {{ page.number}}
                 </span>
             {% else %}
-                <a href="?page=1">{{ num_page }}</a>
+                <a href="?page={{ num_page }}">{{ num_page }}</a>
             {% endif %}
         {% endfor %}
         {% if page.has_next %}

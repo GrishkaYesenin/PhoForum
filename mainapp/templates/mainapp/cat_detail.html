@@ -13,7 +13,7 @@
 
     <ul class="list-tasks">
         {% for task in tasks %}
-            {% include 'mainapp/task_block.html' with task=task num=forloop.counter %}
+            {% include 'mainapp/task_block.html' with task=task num=start_index_on_curr_page|add:forloop.counter %}
         {%endfor%}
     </ul>
     {% include 'mainapp/pagination.html' with page=tasks %}
