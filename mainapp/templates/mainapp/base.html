@@ -16,13 +16,16 @@
 <body>
 <header>
     <h1>PhoForum</h1>
-    <nav><ul class="menu">
-        <li><a href={% url 'home' %}>Выбрать раздел</a></li>
+    <ul class="menu">
+        {% if request.user.is_authenticated %}
+        <li {% if section == 'dashboard' %} class="selected"{% endif %}>
+            <a href={% url 'dashboard' %}>My dashboard</a>
+        {% endif %}
         <li><a href={% url 'info' %}>О сайте</a></li>
         <li><a href={% url 'add_task' %}>Добавить задачу</a></li>
-        <li><a href={% url 'ext_resources' %}>Ссылки на полезные ресурсы</a></li>
-        <li><a href={% url 'login' %}>Войти</a></li>
-    </ul></nav>
+        <li><a href={% url 'login' %}>Log-in</a></li>
+        <li><a href={% url 'logout' %}>Log-out</a></li>
+    </ul>
 </header>
 
 <div class="wrapper">

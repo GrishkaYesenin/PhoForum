@@ -8,6 +8,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.views import LoginView, LogoutView
 
+from django.contrib.auth.decorators import login_required
 
 ADD_PAGINATION = True
 
@@ -39,8 +40,7 @@ class TaskList(ListView):
 
 
 def index(request):
-    context = {'title': 'PhoForum'}
-    return render(request, 'mainapp/home.html', context=context)
+    return render(request, 'mainapp/home.html', {'title': 'PhoForum'})
 
 
 def category_detail(request, category_slug):
@@ -178,8 +178,12 @@ def user_login(request):
 
 
 class UserLogin(LoginView):
-    template_name = 'mainapp/Registration/login.html'
+    template_name = 'mainapp/registration/login.html'
 
 
 class UserLogout(LogoutView):
-    template_name = 'mainapp/Registration/logout.html'
+    template_name = 'mainapp/registration/logout.html'
+
+@login_required
+def dashboard(request):
+    return render(request, 'mainapp/account/dashboard.html', {'section': 'dashboard'})
