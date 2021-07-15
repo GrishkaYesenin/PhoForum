@@ -16,6 +16,7 @@ urlpatterns = [
     path('password_reset/done/', UserPasswordResetDone.as_view(), name='password_reset_done'),
     path('reset/done/', UserPasswordResetComplete.as_view(), name='password_reset_complete'),
     path('reset/<uidb64>/<token>/', UserPasswordResetConfirm.as_view(), name='password_reset_confirm'),
+    path('account/register/', register, name='register'),
     path('<slug:category_slug>/', category_detail, name='category_detail'),
     path('<slug:category_slug>/task<int:task_id>', task_detail, name='task_detail'),
 ]

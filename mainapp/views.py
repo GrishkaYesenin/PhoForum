@@ -2,7 +2,6 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.views.generic import DetailView, ListView
@@ -212,3 +211,21 @@ class UserPasswordResetComplete(PasswordResetCompleteView):
 
 class UserPasswordResetConfirm(PasswordResetConfirmView):
     template_name = 'mainapp/registration/password_reset_confirm.html'
+
+
+def register(request):
+    if request.method == 'POST':
+        user_form = UserRegistrationForm(request.POST)
+        if user_form.is_valid():
+            # Создаем нового пользователя, но пока не сохраняем в базу данных.
+            new_user = user_form.save(commit=False)
+            # Задаем пользователю зашифрованный пароль.
+            new_user.set_password(user_form.cleaned_data['password'])
+            # Сохраняем пользователя в базе данных.
+            new_user.save()
+            return render(request,
+                          'mainapp/account/register_done.html',
+                          {'new_user': new_user})
+    else:
+        user_form = UserRegistrationForm()
+        return render(request, 'mainapp/account/register.html', {'user_form': user_form})
