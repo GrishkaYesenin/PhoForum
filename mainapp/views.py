@@ -6,7 +6,8 @@ from .forms import LoginForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.views.generic import DetailView, ListView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView, \
+    PasswordResetView, PasswordResetDoneView, PasswordResetCompleteView, PasswordResetConfirmView
 
 from django.contrib.auth.decorators import login_required
 
@@ -187,3 +188,27 @@ class UserLogout(LogoutView):
 @login_required
 def dashboard(request):
     return render(request, 'mainapp/account/dashboard.html', {'section': 'dashboard'})
+
+
+class UserPasswordChange(PasswordChangeView):
+    template_name = 'mainapp/registration/password_change_form.html'
+
+
+class UserPasswordChangeDone(PasswordChangeDoneView):
+    template_name = 'mainapp/registration/password_change_done.html'
+
+
+class UserPasswordReset(PasswordResetView):
+    template_name = 'mainapp/registration/password_reset_form.html'
+
+
+class UserPasswordResetDone(PasswordResetDoneView):
+    template_name = 'mainapp/registration/password_reset_done.html'
+
+
+class UserPasswordResetComplete(PasswordResetCompleteView):
+    template_name = 'mainapp/registration/password_reset_complete.html'
+
+
+class UserPasswordResetConfirm(PasswordResetConfirmView):
+    template_name = 'mainapp/registration/password_reset_confirm.html'
