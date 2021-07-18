@@ -1,0 +1,61 @@
+{% load static %}
+{% load show_sidebar %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script id='MathJax script' async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.0/es5/tex-mml-chtml.js"></script>
+
+{% block title %}
+    <title>PhoForum</title>
+{% endblock title %}
+
+    <link type="text/css" href="{% static 'forum/css/styles.css' %}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+    <h1>PhoForum</h1>
+    <ul class="menu">
+        {% if request.user.is_authenticated %}
+        <li {% if section == 'dashboard' %} class="selected"{% endif %}>
+            <a href={% url 'dashboard' %}>My dashboard</a>
+        <li {% if section == 'add_task' %} class="selected"{% endif %}>
+            <a href={% url 'add_task' %}>Добавить задачу</a>
+        {% endif %}
+        <li><a href={% url 'info' %}>О сайте</a></li>
+        <li class="user">
+        {% if request.user.is_authenticated %}
+            Hello, {{request.user.first_name}} <a href="{% url "logout"%}">Logout</a>
+        {% else %}
+            <a href="{% url "login" %}">Log-in</a>
+        {%endif%}
+        </li>
+    </ul>
+</header>
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">
+        {{ message|safe }}
+        <a href="#" class="close">x</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<div class="wrapper">
+    <div class="category-sidebar">
+        {% show_sidebar %}
+    </div>
+
+    <div class="page-content">
+        {% block page_content %}
+        {% endblock page_content %}
+    </div>
+</div>
+
+<footer>Поддержка. Студентам на сухарики</footer>
+</body>
+</html>

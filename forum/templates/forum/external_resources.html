@@ -1,0 +1,9 @@
+{% extends 'forum/base.html' %}
+
+{% block page_content %}
+    <ul class="list-resources">
+    {% for name, link in EXTERNAL_RESOURCES.items %}
+        <li><a href="{{ link }}">{{ name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock page_content %}

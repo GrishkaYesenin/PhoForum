@@ -1,14 +1,14 @@
 import debug_toolbar
 from django.contrib import admin
 from django.urls import path, include
-# from mainapp.views import pageNotFound
+# from forum.views import pageNotFound
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('mainapp.urls')),
-    # path('account/', include('mainapp.account.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
     path('', include('django.contrib.auth.urls')),
+    path('account/', include('account.urls')),
+    path('', include('forum.urls')),
 
 ]
 
