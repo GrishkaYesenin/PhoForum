@@ -17,30 +17,34 @@ EXTERNAL_RESOURCES = {
     'Сливы Фоксфорда': 'https://github.com/limitedeternity/foxford_courses'
 }
 
-class TaskList(ListView):
-    context_object_name = 'tasks'
-    template_name = 'forum/category/cat_detail.html'
-
-    def get_queryset(self, **kwargs):
-        self.category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
-        return self.category.tasks.all()
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        context['title'] = self.kwargs['category_slug']
-        context['category'] = self.category
-        return context
-
-
 
 def index(request):
     return render(request, 'forum/home.html', {'title': 'PhoForum'})
 
 
-def category_detail(request, category_slug):
-    cat_by_slug = get_object_or_404(Category, slug=category_slug)
-    task_list = cat_by_slug.tasks.all()
+# class TaskList(ListView):
+#     context_object_name = 'tasks'
+#     template_name = 'forum/category/cat_detail.html'
+#
+#     def get_queryset(self, **kwargs):
+#         self.category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
+#         return self.category.tasks.all()
+#
+#     def get_context_data(self, **kwargs):
+#         # Call the base implementation first to get a context
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = self.kwargs['category_slug']
+#         context['category'] = self.category
+#         return context
+
+
+def category_detail(request, category_slug='vse-razdely'):
+    if category_slug == 'vse-razdely':
+        cat_by_slug = 'Все разделы'
+        task_list = Task.objects.all()
+    else:
+        cat_by_slug = get_object_or_404(Category, slug=category_slug)
+        task_list = cat_by_slug.tasks.all()
     paginator = Paginator(task_list, NUM_TASKS_ON_THE_PAGE)
     curr_page = request.GET.get('page')
     try:
@@ -48,10 +52,10 @@ def category_detail(request, category_slug):
         start_index_on_curr_page = (int(curr_page)-1)*NUM_TASKS_ON_THE_PAGE
     except PageNotAnInteger:
         tasks = paginator.page(1)
-        start_index_on_curr_page = 1
+        start_index_on_curr_page = 0
     except EmptyPage:
         tasks = paginator.page(paginator.num_pages)
-        start_index_on_curr_page = 1
+        start_index_on_curr_page = 0
     context = {
         'title': cat_by_slug,
         'category': cat_by_slug,
@@ -75,6 +79,9 @@ def category_detail(request, category_slug):
 #         context['title'] = self.kwargs['category_slug']
 #         context['category'] = self.category
 #         return context
+
+
+
 
 def task_detail(request, category_slug, task_id):
     task = get_object_or_404(Task, id=task_id)
@@ -128,14 +135,16 @@ def add_task(request):
             new_task = task_form.save(commit=False)
             new_task.save()
             return redirect('home')
+
     else:
         task_form = AddTaskForm()
-        context = {
-            'title': 'PhoForum',
-            'new_task': new_task,
-            'form': task_form,
-        }
-        return render(request, 'forum/add_task.html', context=context)
+
+    context = {
+        'title': 'PhoForum',
+        'new_task': new_task,
+        'form': task_form,
+    }
+    return render(request, 'forum/add_task.html', context=context)
 
 
 def info(request):
@@ -144,3 +153,33 @@ def info(request):
 
 def external_resources(request):
     return render(request, 'forum/external_resources.html', context=EXTERNAL_RESOURCES)
+
+
+# class CreateSolution(edit.CreateView):
+#     model = Solution
+#     fields = ['author', 'body']
+#
+#
+# class EditSolution(edit.UpdateView):
+#     model = Solution
+#     template_name_suffix = '_update_form'
+#
+#
+# class DeleteSolution(edit.DeleteView):
+#     model = Solution
+#     success_url = 'task_detail'
+#
+#
+# class CreateComment(edit.CreateView):
+#     model = Comment
+#     fields = ['author', 'body']
+#
+#
+# class EditComment(edit.UpdateView):
+#     model = Comment
+#     template_name_suffix = '_update_form'
+#
+#
+# class DeleteComment(edit.DeleteView):
+#     model = Comment
+#     success_url = 'task_detail'

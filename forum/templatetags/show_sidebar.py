@@ -1,6 +1,5 @@
 from django.template import Library
 from ..models import ParentCategory, Category
-
 register = Library()
 
 
