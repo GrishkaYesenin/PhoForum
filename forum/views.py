@@ -1,13 +1,16 @@
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormMixin, CreateView, UpdateView, DeleteView
+
 from .forms import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from django.views.generic import ListView
-
+from django.views.generic import ListView, DetailView
 
 ADD_PAGINATION = True
-
 
 NUM_TASKS_ON_THE_PAGE = 4
 
@@ -22,109 +25,53 @@ def index(request):
     return render(request, 'forum/home.html', {'title': 'PhoForum'})
 
 
-# class TaskList(ListView):
-#     context_object_name = 'tasks'
-#     template_name = 'forum/category/cat_detail.html'
-#
-#     def get_queryset(self, **kwargs):
-#         self.category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
-#         return self.category.tasks.all()
-#
-#     def get_context_data(self, **kwargs):
-#         # Call the base implementation first to get a context
-#         context = super().get_context_data(**kwargs)
-#         context['title'] = self.kwargs['category_slug']
-#         context['category'] = self.category
-#         return context
+def info(request):
+    return render(request, 'forum/info.html')
 
 
-def category_detail(request, category_slug='vse-razdely'):
-    if category_slug == 'vse-razdely':
-        cat_by_slug = 'Все разделы'
-        task_list = Task.objects.all()
-    else:
-        cat_by_slug = get_object_or_404(Category, slug=category_slug)
-        task_list = cat_by_slug.tasks.all()
-    paginator = Paginator(task_list, NUM_TASKS_ON_THE_PAGE)
-    curr_page = request.GET.get('page')
-    try:
-        tasks = paginator.page(curr_page)
-        start_index_on_curr_page = (int(curr_page)-1)*NUM_TASKS_ON_THE_PAGE
-    except PageNotAnInteger:
-        tasks = paginator.page(1)
-        start_index_on_curr_page = 0
-    except EmptyPage:
-        tasks = paginator.page(paginator.num_pages)
-        start_index_on_curr_page = 0
-    context = {
-        'title': cat_by_slug,
-        'category': cat_by_slug,
-        'curr_page': curr_page,
-        'tasks': tasks,
-        'start_index_on_curr_page': start_index_on_curr_page,
-    }
-    return render(request, 'forum/category/cat_detail.html', context=context)
+def external_resources(request):
+    return render(request, 'forum/external_resources.html', context=EXTERNAL_RESOURCES)
 
 
-# class TaskDetail(ListView):
-#     context_object_name = 'solutions'
-#     template_name='forum/task_detail.html'
-#
-#     def get_queryset(self, **kwargs):
-#         return get_object_or_404(Task, id=self.kwargs['task_id'])
-#
-#     def get_context_data(self, **kwargs):
-#         # Call the base implementation first to get a context
-#         context = super().get_context_data(**kwargs)
-#         context['title'] = self.kwargs['category_slug']
-#         context['category'] = self.category
-#         return context
+class TaskList(ListView):
+    context_object_name = 'tasks'
+    template_name = 'forum/category/cat_detail.html'
+    paginate_by = 4
+
+    def get_queryset(self):
+        cat_slug = self.kwargs['category_slug']
+        if cat_slug == 'vse-razdely':
+            self.category = 'Все разделы'
+            task_list = Task.objects.all()
+        else:
+            self.category = get_object_or_404(Category, slug=cat_slug)
+            task_list = self.category.tasks.all()
+        return task_list
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.category
+        context['category'] = self.category
+        return context
 
 
+class TaskDetail(DetailView):
+    model = Task
+    context_object_name = 'task'
+    template_name = 'forum/category/task_detail.html'
 
+    def get_object(self, **kwargs):
+        return get_object_or_404(Task, id=self.kwargs['task_id'])
 
-def task_detail(request, category_slug, task_id):
-    task = get_object_or_404(Task, id=task_id)
-    if task.category.slug == category_slug:
-        solutions = task.solutions.all()
-        context = {
-            'title': 'PhoForum',
-            'task': task,
-            'solutions': solutions,
-            'category_slug': category_slug,
-            'task_id': task_id
-        }
-    else:
-        raise Http404("Invalid path.")
-
-    solution_form = SolutionForm()
-    comment_form = CommentForm()
-    form_context = {
-        'solution_form': solution_form,
-        'comment_form': comment_form,
-    }
-    context = {**context, **form_context}
-    return render(request, template_name='forum/category/task_detail.html', context=context)
-
-
-def add_solution(request, category_slug, task_id):
-    if request.method == 'POST':
-        solution_form = SolutionForm(request.POST, request.FILES)
-        if solution_form.is_valid():
-            new_solution = solution_form.save(commit=False)
-            new_solution.task = get_object_or_404(Task, id=task_id)
-            new_solution.save()
-            return redirect('task_detail', category_slug=category_slug, task_id=task_id)
-
-
-def add_comment(request, category_slug, task_id, solution_id):
-    if request.method == 'POST':
-        comment_form = CommentForm(request.POST, request.FILES)
-        if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.solution = get_object_or_404(Solution, id=solution_id)
-            new_comment.save()
-            return redirect('task_detail', category_slug=category_slug, task_id=task_id)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.kwargs['category_slug']
+        context['category'] = self.get_object().category
+        context['solutions'] = self.get_object().solutions.all()
+        context['solution_form'] = SolutionForm()
+        context['comment_form'] = CommentForm()
+        return context
 
 
 def add_task(request):
@@ -147,39 +94,47 @@ def add_task(request):
     return render(request, 'forum/add_task.html', context=context)
 
 
-def info(request):
-    return render(request, 'forum/info.html')
+class RequestCreateView(SuccessMessageMixin, CreateView):
+    """ 
+    Sub-class of the CreateView to automatically pass the Request to the Form. 
+    """
+    success_message = "Created Successfully"
+
+    # def get_form_kwargs(self):
+    #     """ Add the Request object to the Form's Keyword Arguments. """
+    #     kwargs = super(RequestCreateView, self).get_form_kwargs()
+    #     kwargs.update({'request': self.request})
+    #     return kwargs
 
 
-def external_resources(request):
-    return render(request, 'forum/external_resources.html', context=EXTERNAL_RESOURCES)
+class RequestUpdateView(SuccessMessageMixin, UpdateView):
+    """
+    Sub-class the UpdateView to pass the request to the form and limit the
+    queryset to the requesting user.        
+    """
+    success_message = "Updated Successfully"
+
+    def get_form_kwargs(self):
+        """ Add the Request object to the form's keyword arguments. """
+        kwargs = super(RequestUpdateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+    def get_queryset(self):
+        """ Limit a User to only modifying their own data. """
+        qs = super(RequestUpdateView, self).get_queryset()
+        return qs.filter(owner=self.request.user)
 
 
-# class CreateSolution(edit.CreateView):
-#     model = Solution
-#     fields = ['author', 'body']
-#
-#
-# class EditSolution(edit.UpdateView):
-#     model = Solution
-#     template_name_suffix = '_update_form'
-#
-#
-# class DeleteSolution(edit.DeleteView):
-#     model = Solution
-#     success_url = 'task_detail'
-#
-#
-# class CreateComment(edit.CreateView):
-#     model = Comment
-#     fields = ['author', 'body']
-#
-#
-# class EditComment(edit.UpdateView):
-#     model = Comment
-#     template_name_suffix = '_update_form'
-#
-#
-# class DeleteComment(edit.DeleteView):
-#     model = Comment
-#     success_url = 'task_detail'
+class RequestDeleteView(SuccessMessageMixin, DeleteView):
+    """
+    Sub-class the DeleteView to restrict a User from deleting other 
+    user's data.
+    """
+    success_message = "Deleted Successfully"
+
+    def get_queryset(self):
+        qs = super(RequestDeleteView, self).get_queryset()
+        return qs.filter(owner=self.request.user)
+
+

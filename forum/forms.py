@@ -32,11 +32,29 @@ class AddTaskForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['author', 'text']
+        fields = ['text']
 
 
 class SolutionForm(forms.ModelForm):
     class Meta:
         model = Solution
-        fields = ['author', 'body']
+        fields = ['body']
 
+
+class RequestModelForm(forms.ModelForm):
+    """
+    Sub-class the ModelForm to provide an instance of 'request'.
+    It also saves the object with the appropriate user.
+    """
+
+    def __init__(self, request, *args, **kwargs):
+        """ Override init to grab the request object. """
+        self.request = request
+        super(RequestModelForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        m = super(RequestModelForm, self).save(commit=False)
+        m.owner = self.request.user
+        if commit:
+            m.save()
+        return m

@@ -105,6 +105,25 @@ class ParentCategory(models.Model):
         verbose_name_plural = "Parent Categories"
 
 
+class Solution(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Автор", on_delete=models.SET_NULL, blank=True, null=True)
+    body = models.TextField(max_length=1500)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    voices = models.PositiveIntegerField(blank=True, null=True)
+    task = models.ForeignKey(Task, related_name='solutions', on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.body[:20])
+
+    @property
+    def get_absolute_url(self):
+        return self.task.get_absolute_url()
+
+    class Meta:
+        ordering = ['voices']
+
+
 class Comment(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Автор", on_delete=models.SET_NULL, blank=True, null=True)
     text = models.TextField(max_length=1500)
@@ -124,23 +143,11 @@ class Comment(models.Model):
     def __str__(self):
         return str(self.text)
 
+    @property
+    def get_absolute_url(self):
+        return self.solution.get_absolute_url()
+
     class Meta:
         ordering = ['likes', 'created']
-
-
-class Solution(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Автор", on_delete=models.SET_NULL, blank=True, null=True)
-    body = models.TextField(max_length=1500)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    voices = models.PositiveIntegerField(blank=True, null=True)
-    task = models.ForeignKey(Task, related_name='solutions', on_delete=models.CASCADE, blank=True, null=True)
-
-    def __str__(self):
-        return str(self.body[:20])
-
-    class Meta:
-        ordering = ['voices']
-
 
 
