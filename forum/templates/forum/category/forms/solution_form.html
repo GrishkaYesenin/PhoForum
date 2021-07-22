@@ -1,6 +1,6 @@
 <div class="solution-form">
     <h3>Оставить решение</h3>
-    <form action="#" method="post">
+    <form action="{% url 'add_solution' category_slug=category_slug task_id=task_id %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button name="solution-save" type="submit" value="Save">Добавить решение</button>

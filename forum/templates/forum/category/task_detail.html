@@ -21,9 +21,9 @@
             <p>Комментарии:</p>
             <div class="comments-after-solution">
                 {% include 'forum/category/comment_list.html' with comments=solution.comments.all %}
-                {% include 'forum/category/forms/comment_form.html' with form=comment_form category_slug=category_slug task_id=task_id solution_id=solution.id %}
+                {% include 'forum/category/forms/comment_form.html' with form=comment_form category_slug=category.slug task_id=task.id solution_id=solution.id %}
             </div>
         </div>
     {% endfor %}
-    {% include 'forum/category/forms/solution_form.html' with form=solution_form category_slug=category_slug task_id=task_id %}
+    {% include 'forum/category/forms/solution_form.html' with form=solution_form category_slug=category.slug task_id=task.id %}
 {% endblock page_content %}

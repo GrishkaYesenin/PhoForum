@@ -74,37 +74,31 @@ class TaskDetail(DetailView):
         return context
 
 
-def add_task(request):
-    new_task = None
-    if request.method == 'POST':
-        task_form = AddTaskForm(request.POST, request.FILES)
-        if task_form.is_valid():
-            new_task = task_form.save(commit=False)
-            new_task.save()
-            return redirect('home')
-
-    else:
-        task_form = AddTaskForm()
-
-    context = {
-        'title': 'PhoForum',
-        'new_task': new_task,
-        'form': task_form,
-    }
-    return render(request, 'forum/add_task.html', context=context)
-
-
 class RequestCreateView(SuccessMessageMixin, CreateView):
     """ 
     Sub-class of the CreateView to automatically pass the Request to the Form. 
     """
     success_message = "Created Successfully"
 
-    # def get_form_kwargs(self):
-    #     """ Add the Request object to the Form's Keyword Arguments. """
-    #     kwargs = super(RequestCreateView, self).get_form_kwargs()
-    #     kwargs.update({'request': self.request})
-    #     return kwargs
+
+class TaskCreateView(RequestCreateView):
+    form_class = AddTaskForm
+    success_url = reverse_lazy('home')
+    template_name = 'forum/add_task.html'
+
+
+class SolutionCreateView(RequestCreateView):
+    form_class = SolutionForm
+    template_name = 'forum/category/forms/solution_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.task = get_object_or_404(Task, id=self.kwargs["task_id"])
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("task_detail", kwargs={"category_slug": self.kwargs["category_slug"], "task_id": self.kwargs["task_id"]})
+
 
 
 class RequestUpdateView(SuccessMessageMixin, UpdateView):
