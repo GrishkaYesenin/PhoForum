@@ -69,6 +69,7 @@ class TaskDetail(DetailView):
         context['title'] = self.kwargs['category_slug']
         context['category'] = self.get_object().category
         context['solutions'] = self.get_object().solutions.all()
+        context['url'] = self.get_object().get_absolute_url
         context['solution_form'] = SolutionForm()
         context['comment_form'] = CommentForm()
         return context
@@ -93,11 +94,27 @@ class SolutionCreateView(RequestCreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.task = get_object_or_404(Task, id=self.kwargs["task_id"])
+        self.task = get_object_or_404(Task, id=self.kwargs["task_id"])
+        form.instance.task = self.task
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy("task_detail", kwargs={"category_slug": self.kwargs["category_slug"], "task_id": self.kwargs["task_id"]})
+        return self.task.get_absolute_url
+
+
+class CommentCreateView(RequestCreateView):
+    form_class = CommentForm
+    template_name = 'forum/category/forms/comment_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        self.solution = get_object_or_404(Solution, id=self.kwargs["solution_id"])
+        form.instance.solution = self.solution
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.solution.get_absolute_url
+
 
 
 

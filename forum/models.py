@@ -118,7 +118,7 @@ class Solution(models.Model):
 
     @property
     def get_absolute_url(self):
-        return self.task.get_absolute_url()
+        return self.task.get_absolute_url
 
     class Meta:
         ordering = ['voices']
@@ -145,7 +145,7 @@ class Comment(models.Model):
 
     @property
     def get_absolute_url(self):
-        return self.solution.get_absolute_url()
+        return self.solution.get_absolute_url
 
     class Meta:
         ordering = ['likes', 'created']
