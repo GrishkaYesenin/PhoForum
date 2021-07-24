@@ -1,10 +1,8 @@
 {% for comment in comments %}
     <div class="comment">
-        <div class="title-container">
-            <div class="author">{{ comment.author }}</div>
-            <div class="created">{{ comment.created }}</div>
-        </div>
         <div class="text">{{ comment.text }}</div>
+         <div class="author"> - {{ comment.author }} </div>
+        <div class="created">{{ comment.created }}</div>
         {% if comment.updated != comment.created %}
             <div class="updated">upd: {{ comment.updated }}</div>
         {% endif %}

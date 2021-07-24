@@ -1,18 +1,13 @@
-from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import Http404
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic.edit import FormMixin, CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .forms import *
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.views.generic import ListView, DetailView
 
-ADD_PAGINATION = True
-
-NUM_TASKS_ON_THE_PAGE = 4
 
 EXTERNAL_RESOURCES = {
     'Math us!': 'https://mathus.ru/',
@@ -70,6 +65,7 @@ class TaskDetail(DetailView):
         context['category'] = self.get_object().category
         context['solutions'] = self.get_object().solutions.all()
         context['url'] = self.get_object().get_absolute_url
+        context['curr_user'] = self.request.session.get('user')
         context['solution_form'] = SolutionForm()
         context['comment_form'] = CommentForm()
         return context
@@ -81,41 +77,9 @@ class RequestCreateView(SuccessMessageMixin, CreateView):
     """
     success_message = "Created Successfully"
 
-
-class TaskCreateView(RequestCreateView):
-    form_class = AddTaskForm
-    success_url = reverse_lazy('home')
-    template_name = 'forum/add_task.html'
-
-
-class SolutionCreateView(RequestCreateView):
-    form_class = SolutionForm
-    template_name = 'forum/category/forms/solution_form.html'
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        self.task = get_object_or_404(Task, id=self.kwargs["task_id"])
-        form.instance.task = self.task
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return self.task.get_absolute_url
-
-
-class CommentCreateView(RequestCreateView):
-    form_class = CommentForm
-    template_name = 'forum/category/forms/comment_form.html'
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        self.solution = get_object_or_404(Solution, id=self.kwargs["solution_id"])
-        form.instance.solution = self.solution
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return self.solution.get_absolute_url
-
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_value'] = "Save"
 
 
 class RequestUpdateView(SuccessMessageMixin, UpdateView):
@@ -136,6 +100,10 @@ class RequestUpdateView(SuccessMessageMixin, UpdateView):
         qs = super(RequestUpdateView, self).get_queryset()
         return qs.filter(owner=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_value'] = "Update"
+
 
 class RequestDeleteView(SuccessMessageMixin, DeleteView):
     """
@@ -148,4 +116,60 @@ class RequestDeleteView(SuccessMessageMixin, DeleteView):
         qs = super(RequestDeleteView, self).get_queryset()
         return qs.filter(owner=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_value'] = "Confirm"
 
+
+
+
+class TaskCreateView(CreateView):
+    form_class = AddTaskForm
+    success_url = reverse_lazy('home')
+    template_name = 'forum/add_task.html'
+
+
+class SolutionCreateView(RequestCreateView):
+    model = Solution
+    form_class = SolutionForm
+    template_name = 'forum/category/forms/solution_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.task = get_object_or_404(Task, id=self.kwargs["task_id"])
+        return super().form_valid(form)
+
+
+class SolutionUpdateView(RequestUpdateView):
+    model = Solution
+    form_class = SolutionForm
+    template_name = 'forum/category/forms/solution_form.html'
+
+
+class SolutionDeleteView(RequestDeleteView):
+    model = Solution
+    form_class = SolutionForm
+    template_name = 'forum/category/forms/solution_form.html'
+
+
+class CommentCreateView(RequestCreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'forum/category/forms/comment_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.solution = get_object_or_404(Solution, id=self.kwargs["solution_id"])
+        return super().form_valid(form)
+
+
+class CommentUpdateView(RequestUpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'forum/category/forms/comment_form.html'
+
+
+class CommentDeleteView(RequestDeleteView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'forum/category/forms/comment_form.html'

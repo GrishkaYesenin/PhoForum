@@ -114,11 +114,11 @@ class Solution(models.Model):
     task = models.ForeignKey(Task, related_name='solutions', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return str(self.body[:20])
+        return str(self.body[:10])
 
     @property
     def get_absolute_url(self):
-        return self.task.get_absolute_url
+        return reverse('task_detail', kwargs={'category_slug': self.task.category.slug, 'task_id': self.task.id})
 
     class Meta:
         ordering = ['voices']
@@ -145,7 +145,8 @@ class Comment(models.Model):
 
     @property
     def get_absolute_url(self):
-        return self.solution.get_absolute_url
+        return reverse('task_detail', kwargs={'category_slug': self.solution.task.category.slug, 'task_id': self.solution.task.id})
+
 
     class Meta:
         ordering = ['likes', 'created']

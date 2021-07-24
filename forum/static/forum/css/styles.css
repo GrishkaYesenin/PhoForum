@@ -184,13 +184,15 @@ footer{
     justify-content: space-between;
 }
 
-.comment{
-    padding: 20px 0;
-}
 
-.comment .text{
+.comment {
     border: 1px solid #D3D1CB;
     margin-top: 10px;
     padding: 5px;
     border-radius: 5px;
+    display: flex;
+}
+
+.solution .solution-text{
+    background-color: #f6f6f6;
 }

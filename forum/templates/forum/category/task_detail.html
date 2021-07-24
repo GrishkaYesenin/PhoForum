@@ -14,11 +14,20 @@
                 <div class="author">{{ solution.author }}</div>
                 <div class="created">{{ solution.created }}</div>
             </div>
-            <div class="text">{{ solution.body }}</div>
+            <div class="solution-text">{{ solution.body }}</div>
             {% if solution.updated != solution.created %}
                 <div class="updated">upd: {{ solution.updated }}</div>
             {% endif %}
-            <p>Комментарии:</p>
+            {% if solution.author == curr_user %}
+                <div class="action-for-author">
+                    <form action="{% url 'edit_solution' category_slug=category.slug task_id=task.id solution_id=solution.id %}" target="_blank">
+                    <button>Править</button>
+                    </form>
+                    <form action="{% url 'delete_solution' category_slug=category.slug task_id=task.id solution_id=solution.id %}" target="_blank">
+                        <button>х</button>
+                    </form>
+                </div>
+            {% endif %}
             <div class="comments-after-solution">
                 {% include 'forum/category/comment_list.html' with comments=solution.comments.all %}
                 {% include 'forum/category/forms/comment_form.html' with form=comment_form category_slug=category.slug task_id=task.id solution_id=solution.id %}

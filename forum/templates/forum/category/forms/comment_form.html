@@ -1,8 +1,7 @@
 <div class="comment-form">
-    <h3>Комментировать:</h3>
     <form action="{% url 'add_comment' category_slug=category_slug task_id=task_id solution_id=solution_id %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" value="Save">Добавить коммент</button>
+    <button type="submit" value={{ form_value }} >Добавить коммент</button>
     </form>
 </div>
