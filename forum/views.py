@@ -77,9 +77,8 @@ class RequestCreateView(SuccessMessageMixin, CreateView):
     """
     success_message = "Created Successfully"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form_value'] = "Save"
+    def get_success_url(self):
+        return reverse_lazy('task_detail', kwargs={'category_slug': self.kwargs["category_slug"], 'task_id': self.kwargs["task_id"]})
 
 
 class RequestUpdateView(SuccessMessageMixin, UpdateView):
@@ -121,8 +120,6 @@ class RequestDeleteView(SuccessMessageMixin, DeleteView):
         context['form_value'] = "Confirm"
 
 
-
-
 class TaskCreateView(CreateView):
     form_class = AddTaskForm
     success_url = reverse_lazy('home')
@@ -130,9 +127,11 @@ class TaskCreateView(CreateView):
 
 
 class SolutionCreateView(RequestCreateView):
-    model = Solution
     form_class = SolutionForm
     template_name = 'forum/category/forms/solution_form.html'
+
+    # def get_success_url(self):
+    #     return reverse_lazy('task_detail', kwargs={'category_slug': self.kwargs["category_slug"], 'task_id': self.kwargs["task_id"]})
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -141,19 +140,16 @@ class SolutionCreateView(RequestCreateView):
 
 
 class SolutionUpdateView(RequestUpdateView):
-    model = Solution
     form_class = SolutionForm
     template_name = 'forum/category/forms/solution_form.html'
 
 
 class SolutionDeleteView(RequestDeleteView):
-    model = Solution
     form_class = SolutionForm
     template_name = 'forum/category/forms/solution_form.html'
 
 
 class CommentCreateView(RequestCreateView):
-    model = Comment
     form_class = CommentForm
     template_name = 'forum/category/forms/comment_form.html'
 
@@ -162,14 +158,15 @@ class CommentCreateView(RequestCreateView):
         form.instance.solution = get_object_or_404(Solution, id=self.kwargs["solution_id"])
         return super().form_valid(form)
 
+    # def get_success_url(self):
+    #     return reverse_lazy('task_detail', kwargs={'category_slug': self.kwargs["category_slug"], 'task_id': self.kwargs["task_id"]})
+
 
 class CommentUpdateView(RequestUpdateView):
-    model = Comment
     form_class = CommentForm
     template_name = 'forum/category/forms/comment_form.html'
 
 
 class CommentDeleteView(RequestDeleteView):
-    model = Comment
     form_class = CommentForm
     template_name = 'forum/category/forms/comment_form.html'
